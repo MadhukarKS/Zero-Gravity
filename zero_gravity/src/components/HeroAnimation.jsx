@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import bikeHero from "@/assets/bike-hero.jpg";
 import zeroGravityLogo from "@/assets/zero_gravity.jpeg";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 const PARTS = [
   { x: -360, y: -160, r: -30, w: 90, h: 90, shape: "wheel" },
@@ -223,7 +223,7 @@ export default function HeroAnimation() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Link to="/" hash="gallery" className="btn-yellow">Explore Builds →</Link>
+          <Link to="/#gallery" className="btn-yellow">Explore Builds →</Link>
           <Link to="/book-service" className="btn-ghost-yellow">Book Your Service</Link>
         </div>
       </div>

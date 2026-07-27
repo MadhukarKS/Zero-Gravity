@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -6,26 +6,26 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 items-start">
         <div>
           <div className="font-display font-black tracking-[0.4em] text-yellow text-lg">ZERO GRAVITY</div>
-          <p className="text-xs text-foreground/50 mt-3 leading-relaxed max-w-xs">
+          <p className="text-xs text-foreground/50 mt-3 leading-relaxed max-w-xs font-body">
             The Bikers Destination. Premium modification, custom builds & curated riding gear — engineered for obsession.
           </p>
         </div>
         <div className="text-sm">
           <div className="text-[10px] tracking-[0.4em] uppercase text-yellow mb-3">Explore</div>
-          <ul className="space-y-2 text-foreground/70">
-            <li><Link to="/" hash="about" className="hover:text-yellow">About</Link></li>
-            <li><Link to="/" hash="services" className="hover:text-yellow">Services</Link></li>
+          <ul className="space-y-2 text-foreground/70 font-body">
+            <li><Link to="/#about" className="hover:text-yellow">About</Link></li>
+            <li><Link to="/#services" className="hover:text-yellow">Services</Link></li>
             <li><Link to="/accessories" className="hover:text-yellow">Accessories</Link></li>
             <li><Link to="/cart" className="hover:text-yellow">Cart</Link></li>
-            <li><Link to="/" hash="contact" className="hover:text-yellow">Contact</Link></li>
+            <li><Link to="/#contact" className="hover:text-yellow">Contact</Link></li>
           </ul>
         </div>
         <div className="text-sm">
           <div className="text-[10px] tracking-[0.4em] uppercase text-yellow mb-3">Garage</div>
-          <p className="text-foreground/70 leading-relaxed">
+          <p className="text-foreground/70 leading-relaxed font-body">
             Pam Arcade, Kulur Ferry Rd,<br />Kottara, Mangaluru, KA 575006
           </p>
-          <p className="text-foreground/70 mt-3">
+          <p className="text-foreground/70 mt-3 font-body">
             <a href="tel:+917892318639" className="hover:text-yellow">078923 18639</a>
           </p>
         </div>

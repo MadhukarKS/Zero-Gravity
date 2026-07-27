@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import HeroAnimation from "@/components/HeroAnimation";
 import FloatingParts from "@/components/FloatingParts";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -12,25 +12,6 @@ import { motion } from "motion/react";
 
 import { ACCESSORIES } from "@/lib/accessories";
 import { useCart, buildWhatsAppSingleUrl } from "@/lib/cart";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "ZERO GRAVITY — The Bikers Destination | Premium Bike Modification" },
-      {
-        name: "description",
-        content:
-          "ZERO GRAVITY is a premium superbike modification studio. Custom builds, performance upgrades, accessories and servicing — built for riders, not just bikes.",
-      },
-      { property: "og:title", content: "ZERO GRAVITY — The Bikers Destination" },
-      {
-        property: "og:description",
-        content: "Premium bike modification, custom builds & performance upgrades.",
-      },
-    ],
-  }),
-  component: Index,
-});
 
 const SERVICES = [
   {
@@ -98,12 +79,12 @@ function SectionLabel({ kicker, title, sub }) {
       <h2 className="font-display font-black text-4xl md:text-6xl text-foreground">
         {title}
       </h2>
-      {sub && <p className="mt-4 text-foreground/60 max-w-2xl mx-auto">{sub}</p>}
+      {sub && <p className="mt-4 text-foreground/60 max-w-2xl mx-auto font-body">{sub}</p>}
     </div>
   );
 }
 
-function Index() {
+export default function Home() {
   const { add } = useCart();
   return (
     <div id="top" className="relative bg-background text-foreground">
@@ -139,8 +120,7 @@ function Index() {
           ].map((it) => (
             <Link
               key={it.k}
-              to="/"
-              hash="services"
+              to="/#services"
               className="group px-4 py-5 flex items-center gap-3 hover:bg-yellow/5 transition-colors duration-300"
             >
               <span className="font-display font-black text-yellow/70 text-lg md:text-xl group-hover:text-yellow transition-colors duration-300">
@@ -148,7 +128,7 @@ function Index() {
               </span>
               <div className="min-w-0">
                 <div className="font-display font-bold text-sm md:text-base truncate">{it.t}</div>
-                <div className="text-[10px] md:text-xs text-foreground/50 tracking-widest uppercase truncate">
+                <div className="text-[10px] md:text-xs text-foreground/50 tracking-widest uppercase truncate font-body">
                   {it.s}
                 </div>
               </div>
@@ -241,7 +221,7 @@ function Index() {
           </motion.div>
         </div>
 
-        {/* FOUNDER MESSAGE CARD — sits just below the story */}
+        {/* FOUNDER MESSAGE CARD */}
         <div className="max-w-5xl mx-auto mt-24 relative">
           <motion.div
             className="card-dark p-8 md:p-12 relative overflow-hidden"
@@ -257,7 +237,7 @@ function Index() {
                   S
                 </div>
                 <div className="md:mt-2">
-                  <div className="text-[10px] tracking-[0.4em] uppercase text-yellow">Founder</div>
+                  <div className="text-[10px] tracking-[0.4em] uppercase text-yellow font-semibold">Founder</div>
                   <div className="font-display text-lg font-black mt-0.5">Shreyas</div>
                 </div>
               </div>
@@ -320,7 +300,7 @@ function Index() {
         </div>
       </motion.section>
 
-      {/* GALLERY — Indian Bikes */}
+      {/* GALLERY */}
       <motion.section
         id="gallery"
         className="relative py-28 px-6 overflow-hidden"
@@ -362,9 +342,9 @@ function Index() {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
                 <div className="absolute inset-x-0 bottom-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="text-yellow text-xs tracking-[0.4em] uppercase">{b.tag}</div>
+                  <div className="text-yellow text-xs tracking-[0.4em] uppercase font-semibold">{b.tag}</div>
                   <h3 className="font-display text-2xl font-bold mt-1 text-white">{b.name}</h3>
-                  <div className="text-xs text-white/70 tracking-widest uppercase mt-1">{b.spec}</div>
+                  <div className="text-xs text-white/70 tracking-widest uppercase mt-1 font-body">{b.spec}</div>
                 </div>
                 <div className="absolute top-4 right-4 w-10 h-10 rounded-full border border-yellow/30 bg-black/40 flex items-center justify-center text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   ↗

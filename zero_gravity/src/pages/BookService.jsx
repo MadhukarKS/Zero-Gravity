@@ -1,22 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "motion/react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { WHATSAPP_NUMBER } from "@/lib/cart";
-
-export const Route = createFileRoute("/book-service")({
-  head: () => ({
-    meta: [
-      { title: "Book Your Service — ZERO GRAVITY" },
-      {
-        name: "description",
-        content: "Book a custom bike modification, performance upgrade, or premium service at Zero Gravity.",
-      },
-    ],
-  }),
-  component: BookServicePage,
-});
 
 const SERVICE_TYPES = [
   "Custom Bike Modification",
@@ -26,7 +12,7 @@ const SERVICE_TYPES = [
   "Custom Paint & Detailing",
 ];
 
-function BookServicePage() {
+export default function BookService() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [bikeBrand, setBikeBrand] = useState("");
@@ -97,7 +83,7 @@ function BookServicePage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Sagar Shetty"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                   {/* Phone */}
@@ -109,7 +95,7 @@ function BookServicePage() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="e.g. 7892318639"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                 </div>
@@ -124,7 +110,7 @@ function BookServicePage() {
                       value={bikeBrand}
                       onChange={(e) => setBikeBrand(e.target.value)}
                       placeholder="e.g. Royal Enfield"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                   {/* Bike Model */}
@@ -136,7 +122,7 @@ function BookServicePage() {
                       value={bikeModel}
                       onChange={(e) => setBikeModel(e.target.value)}
                       placeholder="e.g. Himalayan 450"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                 </div>
@@ -147,7 +133,7 @@ function BookServicePage() {
                   <select
                     value={serviceType}
                     onChange={(e) => setServiceType(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer font-body"
                   >
                     {SERVICE_TYPES.map((t) => (
                       <option key={t} value={t} className="bg-card text-foreground">
@@ -166,7 +152,7 @@ function BookServicePage() {
                     min={today}
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer"
+                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer font-body"
                   />
                 </div>
 

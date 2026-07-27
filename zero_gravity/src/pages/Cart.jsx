@@ -1,24 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { buildWhatsAppOrderUrl, useCart } from "@/lib/cart";
-
-export const Route = createFileRoute("/cart")({
-  head: () => ({
-    meta: [
-      { title: "Your Cart — ZERO GRAVITY" },
-      { name: "description", content: "Review your selected ZG accessories and place your order via WhatsApp." },
-    ],
-  }),
-  component: CartPage,
-});
 
 function priceNumber(p) {
   const n = Number(p.replace(/[^\d.]/g, ""));
   return Number.isFinite(n) ? n : 0;
 }
 
-function CartPage() {
+export default function Cart() {
   const { items, setQty, remove, clear } = useCart();
   const subtotal = items.reduce((s, i) => s + priceNumber(i.price) * i.qty, 0);
   const fmt = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
@@ -50,7 +40,7 @@ function CartPage() {
                   <div key={i.id} className="card-dark p-4 flex items-center gap-4">
                     <img src={i.img} alt={i.name} width={96} height={96} className="w-24 h-24 rounded object-cover shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-[10px] tracking-[0.3em] uppercase text-yellow/80">{i.cat}</div>
+                      <div className="text-[10px] tracking-[0.3em] uppercase text-yellow/80 font-semibold">{i.cat}</div>
                       <h3 className="font-display font-bold truncate">{i.name}</h3>
                       <p className="text-yellow text-sm mt-1 font-bold">{i.price}</p>
                     </div>
@@ -59,10 +49,10 @@ function CartPage() {
                       <span className="w-6 text-center font-display font-bold">{i.qty}</span>
                       <button onClick={() => setQty(i.id, i.qty + 1)} className="w-8 h-8 rounded-full border border-yellow/30 text-yellow hover:bg-yellow hover:text-primary-foreground transition cursor-pointer flex items-center justify-center font-bold">+</button>
                     </div>
-                    <button onClick={() => remove(i.id)} className="text-xs text-foreground/50 hover:text-yellow ml-2 cursor-pointer">Remove</button>
+                    <button onClick={() => remove(i.id)} className="text-xs text-foreground/50 hover:text-yellow ml-2 cursor-pointer font-body">Remove</button>
                   </div>
                 ))}
-                <button onClick={clear} className="text-xs tracking-[0.3em] uppercase text-foreground/50 hover:text-yellow cursor-pointer">
+                <button onClick={clear} className="text-xs tracking-[0.3em] uppercase text-foreground/50 hover:text-yellow cursor-pointer font-semibold">
                   Clear cart
                 </button>
               </div>

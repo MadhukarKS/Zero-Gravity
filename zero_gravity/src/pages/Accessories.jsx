@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -14,26 +14,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
-export const Route = createFileRoute("/accessories")({
-  head: () => ({
-    meta: [
-      { title: "Premium Riding Accessories — ZERO GRAVITY" },
-      {
-        name: "description",
-        content:
-          "Shop ZG-curated helmets, jackets, gloves, boots, exhausts and more. Add to cart or order instantly via WhatsApp.",
-      },
-      { property: "og:title", content: "ZG Accessories — Premium Riding Gear" },
-      {
-        property: "og:description",
-        content: "Helmets, jackets, gloves, boots, exhausts, eyewear and more — curated by Zero Gravity.",
-      },
-    ],
-  }),
-  component: AccessoriesPage,
-});
-
-function AccessoriesPage() {
+export default function Accessories() {
   const [cat, setCat] = useState("All");
   const [q, setQ] = useState("");
   const { add } = useCart();
@@ -189,7 +170,7 @@ function AccessoriesPage() {
           </div>
 
           {items.length === 0 ? (
-            <div className="text-center py-24 text-foreground/50">
+            <div className="text-center py-24 text-foreground/50 font-body">
               No products match your filters.
             </div>
           ) : (

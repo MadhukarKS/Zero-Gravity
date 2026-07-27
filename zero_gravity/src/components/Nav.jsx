@@ -1,5 +1,4 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "@/lib/cart";
 import zeroGravityLogo from "@/assets/zero_gravity.jpeg";
 import {
@@ -32,13 +31,13 @@ export default function Nav() {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center justify-center gap-8 text-[11px] tracking-[0.3em] uppercase text-foreground/70">
-          <Link to="/" hash="about" className="hover:text-yellow transition">About</Link>
-          <Link to="/" hash="services" className="hover:text-yellow transition">Services</Link>
-          <Link to="/" hash="gallery" className="hover:text-yellow transition">Gallery</Link>
-          <Link to="/accessories" className="hover:text-yellow transition" activeProps={{ className: "text-yellow" }}>
+          <Link to="/#about" className="hover:text-yellow transition">About</Link>
+          <Link to="/#services" className="hover:text-yellow transition">Services</Link>
+          <Link to="/#gallery" className="hover:text-yellow transition">Gallery</Link>
+          <Link to="/accessories" className="hover:text-yellow transition">
             Accessories
           </Link>
-          <Link to="/" hash="contact" className="hover:text-yellow transition">Contact</Link>
+          <Link to="/#contact" className="hover:text-yellow transition">Contact</Link>
         </div>
 
         {/* Action Buttons & Mobile Menu Trigger */}
@@ -87,13 +86,13 @@ export default function Nav() {
                   </SheetHeader>
                   <div className="py-8 flex flex-col gap-5 text-sm uppercase font-semibold tracking-widest">
                     <SheetClose asChild>
-                      <Link to="/" hash="about" className="hover:text-yellow transition py-1">About Studio</Link>
+                      <Link to="/#about" className="hover:text-yellow transition py-1">About Studio</Link>
                     </SheetClose>
                     <SheetClose asChild>
-                      <Link to="/" hash="services" className="hover:text-yellow transition py-1">Services</Link>
+                      <Link to="/#services" className="hover:text-yellow transition py-1">Services</Link>
                     </SheetClose>
                     <SheetClose asChild>
-                      <Link to="/" hash="gallery" className="hover:text-yellow transition py-1">Custom Builds</Link>
+                      <Link to="/#gallery" className="hover:text-yellow transition py-1">Custom Builds</Link>
                     </SheetClose>
                     <SheetClose asChild>
                       <Link to="/accessories" className="hover:text-yellow transition py-1">Accessories Vault</Link>
@@ -102,11 +101,11 @@ export default function Nav() {
                       <Link to="/book-service" className="hover:text-yellow transition py-1">Book Service</Link>
                     </SheetClose>
                     <SheetClose asChild>
-                      <Link to="/" hash="contact" className="hover:text-yellow transition py-1">Contact Us</Link>
+                      <Link to="/#contact" className="hover:text-yellow transition py-1">Contact Us</Link>
                     </SheetClose>
                   </div>
                 </div>
-                <div className="pt-6 border-t border-border text-center text-xs text-foreground/50">
+                <div className="pt-6 border-t border-border text-center text-xs text-foreground/50 font-body">
                   The Bikers Destination
                 </div>
               </SheetContent>
