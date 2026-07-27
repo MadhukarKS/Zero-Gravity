@@ -4,20 +4,16 @@ import zeroGravityLogo from "@/assets/zero_gravity.jpeg";
 import { Link } from "@tanstack/react-router";
 
 const PARTS = [
-  { x: -460, y: -200, r: -45, w: 110, h: 110, shape: "wheel" },
-  { x: 440, y: -220, r: 30, w: 110, h: 110, shape: "wheel" },
-  { x: -260, y: 180, r: 20, w: 90, h: 32, shape: "bar" },
-  { x: 320, y: 220, r: -25, w: 100, h: 36, shape: "bar" },
-  { x: -540, y: 80, r: 60, w: 56, h: 56, shape: "bolt" },
-  { x: 520, y: -50, r: -60, w: 56, h: 56, shape: "bolt" },
-  { x: -160, y: -300, r: 15, w: 140, h: 42, shape: "exhaust" },
-  { x: 180, y: 280, r: -15, w: 140, h: 42, shape: "exhaust" },
-  { x: -380, y: -70, r: 90, w: 48, h: 48, shape: "bolt" },
-  { x: 400, y: 80, r: -90, w: 48, h: 48, shape: "bolt" },
-  { x: 0, y: -340, r: 0, w: 72, h: 72, shape: "wheel" },
-  { x: 0, y: 320, r: 0, w: 60, h: 60, shape: "bolt" },
-  { x: -640, y: -60, r: 45, w: 64, h: 26, shape: "bar" },
-  { x: 620, y: 140, r: -45, w: 64, h: 26, shape: "bar" },
+  { x: -360, y: -160, r: -30, w: 90, h: 90, shape: "wheel" },
+  { x: 340, y: -180, r: 25, w: 90, h: 90, shape: "wheel" },
+  { x: -200, y: 140, r: 15, w: 80, h: 28, shape: "bar" },
+  { x: 240, y: 160, r: -20, w: 80, h: 28, shape: "bar" },
+  { x: -420, y: 60, r: 45, w: 44, h: 44, shape: "bolt" },
+  { x: 400, y: -40, r: -45, w: 44, h: 44, shape: "bolt" },
+  { x: -120, y: -220, r: 10, w: 110, h: 32, shape: "exhaust" },
+  { x: 140, y: 200, r: -10, w: 110, h: 32, shape: "exhaust" },
+  { x: 0, y: -260, r: 0, w: 56, h: 56, shape: "wheel" },
+  { x: 0, y: 240, r: 0, w: 48, h: 48, shape: "bolt" },
 ];
 
 function Part({ shape, w, h }) {
@@ -29,8 +25,8 @@ function Part({ shape, w, h }) {
           height: h,
           borderRadius: "50%",
           background: "radial-gradient(circle at 30% 30%, #2a2a2a, #0a0a0a 70%)",
-          border: "3px solid #facc15",
-          boxShadow: "0 0 24px rgba(250,204,21,.45), inset 0 0 12px rgba(0,0,0,.85)",
+          border: "2px solid #e5a93b",
+          boxShadow: "0 0 16px rgba(229,169,59,0.35)",
         }}
       />
     );
@@ -42,8 +38,7 @@ function Part({ shape, w, h }) {
           height: h,
           background: "linear-gradient(90deg, #1a1a1a, #555, #1a1a1a)",
           borderRadius: 4,
-          boxShadow: "0 0 16px rgba(250,204,21,.4)",
-          borderTop: "1px solid #facc15",
+          borderTop: "1px solid #e5a93b",
         }}
       />
     );
@@ -55,7 +50,7 @@ function Part({ shape, w, h }) {
           height: h,
           background: "linear-gradient(180deg, #666, #1a1a1a)",
           borderRadius: 999,
-          boxShadow: "0 0 22px rgba(250,204,21,.45)",
+          boxShadow: "0 0 14px rgba(229,169,59,0.3)",
         }}
       />
     );
@@ -64,10 +59,8 @@ function Part({ shape, w, h }) {
       style={{
         width: w,
         height: h,
-        background:
-          "conic-gradient(from 0deg, #facc15, #92741a, #facc15, #92741a, #facc15)",
+        background: "conic-gradient(from 0deg, #e5a93b, #92741a, #e5a93b)",
         clipPath: "polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%)",
-        boxShadow: "0 0 18px rgba(250,204,21,.7)",
       }}
     />
   );
@@ -82,13 +75,13 @@ export default function HeroAnimation() {
       setPhase("logo");
       return;
     }
-    const t1 = setTimeout(() => setPhase("explode"), 400);
-    const t2 = setTimeout(() => setPhase("float"), 800);
-    const t3 = setTimeout(() => setPhase("implode"), 1700);
+    const t1 = setTimeout(() => setPhase("explode"), 350);
+    const t2 = setTimeout(() => setPhase("float"), 700);
+    const t3 = setTimeout(() => setPhase("implode"), 1400);
     const t4 = setTimeout(() => {
       setPhase("logo");
       if (typeof sessionStorage !== "undefined") sessionStorage.setItem("zg-loaded", "true");
-    }, 2200);
+    }, 1800);
     return () => [t1, t2, t3, t4].forEach(clearTimeout);
   }, []);
 
@@ -106,7 +99,7 @@ export default function HeroAnimation() {
       {!showLogo && (
         <button
           onClick={skipIntro}
-          className="absolute bottom-10 right-10 z-50 text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase bg-black/55 hover:bg-black/80 text-foreground/80 hover:text-yellow border border-white/10 hover:border-yellow/50 rounded-full px-5 py-2.5 transition duration-300 pointer-events-auto cursor-pointer shadow-lg backdrop-blur-md"
+          className="absolute bottom-10 right-10 z-50 text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase bg-black/60 hover:bg-black/90 text-foreground/80 hover:text-yellow border border-white/10 hover:border-yellow/50 rounded-full px-5 py-2.5 transition duration-200 pointer-events-auto cursor-pointer shadow-lg backdrop-blur-md"
         >
           Skip Intro
         </button>
@@ -116,41 +109,42 @@ export default function HeroAnimation() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#000_85%)]" />
       {/* Yellow ambient glow */}
       <div
-        className="absolute inset-0 transition-opacity duration-700"
+        className="absolute inset-0 transition-opacity duration-500"
         style={{
           background: "var(--gradient-radial-yellow)",
           opacity: showLogo ? 0.95 : 0.4,
         }}
       />
 
-      {/* Race bike */}
+      {/* Race bike with hardware acceleration */}
       {showBike && (
         <div
           className="absolute inset-0 flex items-center justify-center px-4"
           style={{
             animation:
               phase === "ride"
-                ? "ride-in 0.8s cubic-bezier(.16,.84,.3,1) forwards"
+                ? "ride-in 0.6s cubic-bezier(.16,.84,.3,1) forwards"
                 : "none",
             willChange: "transform, opacity",
           }}
         >
-          <img
-            src={bikeHero}
-            alt="ZERO GRAVITY superbike"
-            width={1600}
-            height={900}
-            fetchPriority="high"
-            className="w-[min(94vw,1300px)] h-auto object-contain"
-            style={{
-              opacity: phase === "explode" ? 0 : 1,
-              transform: phase === "explode" ? "scale(1.1)" : "scale(1)",
-              transition: "opacity 0.4s, transform 0.5s",
-              filter: phase === "explode"
-                ? "blur(6px) brightness(1.4) drop-shadow(0 0 60px color-mix(in oklab, var(--yellow) 30%, transparent))"
-                : "drop-shadow(0 0 60px color-mix(in oklab, var(--yellow) 30%, transparent))",
-            }}
-          />
+          <div className="relative flex items-center justify-center">
+            <div className="absolute inset-0 bg-yellow/15 blur-3xl rounded-full scale-110 pointer-events-none" />
+            <img
+              src={bikeHero}
+              alt="ZERO GRAVITY superbike"
+              width={1200}
+              height={675}
+              fetchPriority="high"
+              decoding="async"
+              className="w-[min(94vw,1200px)] h-auto object-contain relative z-10"
+              style={{
+                opacity: phase === "explode" ? 0 : 1,
+                transform: phase === "explode" ? "scale(1.05)" : "scale(1)",
+                transition: "opacity 0.3s, transform 0.4s",
+              }}
+            />
+          </div>
         </div>
       )}
 
@@ -161,10 +155,10 @@ export default function HeroAnimation() {
             const isFloat = phase === "float";
             const isImplode = phase === "implode";
             const anim = isImplode
-              ? "implode 0.5s cubic-bezier(.7,0,.84,0) forwards"
+              ? "implode 0.4s cubic-bezier(.7,0,.84,0) forwards"
               : isFloat
               ? "float-part 4s ease-in-out infinite"
-              : "explode 0.6s cubic-bezier(.16,.84,.3,1) forwards";
+              : "explode 0.5s cubic-bezier(.16,.84,.3,1) forwards";
             return (
               <div
                 key={i}
@@ -172,15 +166,15 @@ export default function HeroAnimation() {
                 style={{
                   "--ex": `${p.x}px`,
                   "--ey": `${p.y}px`,
-                  "--er": `${p.r * 4}deg`,
+                  "--er": `${p.r * 3}deg`,
                   "--tx": `${p.x}px`,
                   "--ty": `${p.y}px`,
                   "--r": `${p.r}deg`,
                   animation: anim,
-                  animationDelay: isFloat ? `${i * 0.05}s` : "0s",
+                  animationDelay: isFloat ? `${i * 0.04}s` : "0s",
                   willChange: "transform",
                   transform: isFloat
-                    ? `translate(${p.x}px, ${p.y}px) rotate(${p.r}deg)`
+                    ? `translate3d(${p.x}px, ${p.y}px, 0) rotate(${p.r}deg)`
                     : undefined,
                 }}
               >
@@ -197,38 +191,30 @@ export default function HeroAnimation() {
         style={{
           opacity: showLogo ? 1 : 0,
           animation: showLogo
-            ? "logo-reveal 0.8s cubic-bezier(.16,.84,.3,1) forwards"
+            ? "logo-reveal 0.6s cubic-bezier(.16,.84,.3,1) forwards"
             : "none",
         }}
       >
         <div className="relative">
+          <div className="absolute inset-0 rounded-full blur-2xl bg-yellow/30 transform scale-125" />
           <div
-            className="absolute inset-0 rounded-full blur-3xl"
+            className="relative rounded-full overflow-hidden bg-black/50 border border-yellow/30 shadow-2xl"
             style={{
-              background:
-                "radial-gradient(circle, color-mix(in oklab, var(--yellow) 60%, transparent), transparent 70%)",
-              transform: "scale(1.7)",
-            }}
-          />
-          <div
-            className="relative rounded-full overflow-hidden bg-black/40 border border-yellow/20"
-            style={{
-              boxShadow:
-                "0 0 50px color-mix(in oklab, var(--yellow) 40%, transparent), 0 0 100px color-mix(in oklab, var(--yellow) 15%, transparent)",
               animation: "pulse-glow 3s ease-in-out infinite",
             }}
           >
             <img
               src={zeroGravityLogo}
               alt="ZERO GRAVITY — The Bikers Destination"
-              width={500}
-              height={500}
-              className="block w-[min(64vw,400px)] h-[min(64vw,400px)] object-cover"
+              width={400}
+              height={400}
+              decoding="async"
+              className="block w-[min(64vw,360px)] h-[min(64vw,360px)] object-cover"
             />
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-4">
+        <div className="mt-6 flex items-center justify-center gap-4">
           <div className="h-px w-12 sm:w-20 bg-yellow/40" />
           <p className="text-foreground/80 uppercase tracking-[0.4em] text-[10px] sm:text-xs font-semibold font-display">
             The Bikers Destination

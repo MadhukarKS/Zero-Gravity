@@ -3,18 +3,18 @@ import { useMemo } from "react";
 export default function FloatingParts() {
   const items = useMemo(
     () =>
-      Array.from({ length: 8 }).map((_, i) => ({
-        top: `${(i * 13 + 5) % 90}%`,
-        left: `${(i * 23 + 7) % 95}%`,
-        size: 20 + ((i * 7) % 30),
-        delay: i * 0.7,
-        rot: (i * 37) % 360,
+      Array.from({ length: 6 }).map((_, i) => ({
+        top: `${(i * 18 + 8) % 85}%`,
+        left: `${(i * 29 + 11) % 90}%`,
+        size: 16 + ((i * 6) % 24),
+        delay: i * 0.8,
+        rot: (i * 45) % 360,
       })),
     [],
   );
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-30">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-25">
       {items.map((it, i) => (
         <div
           key={i}
@@ -27,16 +27,14 @@ export default function FloatingParts() {
             "--tx": "0px",
             "--ty": "0px",
             "--r": `${it.rot}deg`,
-            animation: `float-part ${6 + (i % 4)}s ease-in-out ${it.delay}s infinite`,
+            willChange: "transform",
+            animation: `float-part ${7 + (i % 3)}s ease-in-out ${it.delay}s infinite`,
           }}
         >
           <div
-            className="w-full h-full rounded-full"
+            className="w-full h-full rounded-full border border-yellow/40 bg-yellow/5"
             style={{
-              background:
-                "conic-gradient(from 0deg, transparent, var(--yellow) 50%, transparent)",
-              opacity: 0.4,
-              filter: "blur(0.5px)",
+              boxShadow: "0 0 10px rgba(229,169,59,0.3)",
             }}
           />
         </div>

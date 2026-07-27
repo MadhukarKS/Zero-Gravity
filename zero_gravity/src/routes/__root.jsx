@@ -7,10 +7,8 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart";
 
 function NotFoundComponent() {
@@ -19,7 +17,7 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground font-display">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-muted-foreground font-body">
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
@@ -38,9 +36,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -48,7 +43,7 @@ function ErrorComponent({ error, reset }) {
         <h1 className="text-xl font-semibold tracking-tight text-foreground font-display">
           This page didn't load
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-muted-foreground font-body">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
