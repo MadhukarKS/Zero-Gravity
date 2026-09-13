@@ -5,6 +5,12 @@ import Home from "@/pages/Home";
 import Accessories from "@/pages/Accessories";
 import BookService from "@/pages/BookService";
 import Cart from "@/pages/Cart";
+import AdminLayout from "@/components/admin/AdminLayout";
+import AdminDashboard from "@/components/admin/AdminDashboard";
+import AddProductPage from "@/pages/AddProductPage";
+import CategoriesPage from "@/pages/admin/CategoriesPage";
+import BrandsPage from "@/pages/admin/BrandsPage";
+import EditProductPage from "@/pages/admin/EditProductPage";
 import NotFound from "@/pages/NotFound";
 
 function ScrollToTop() {
@@ -33,6 +39,13 @@ export default function App() {
         <Route path="/accessories" element={<Accessories />} />
         <Route path="/book-service" element={<BookService />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="add-product" element={<AddProductPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="brands" element={<BrandsPage />} />
+          <Route path="edit-product/:id" element={<EditProductPage />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </CartProvider>
