@@ -1,6 +1,9 @@
 {
   "name": "zero-gravity-workspace",
   "private": true,
+  "workspaces": [
+    "zero_gravity"
+  ],
   "scripts": {
     "dev": "npm --prefix zero_gravity run dev",
     "build": "npm --prefix zero_gravity run build",
