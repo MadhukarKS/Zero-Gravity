@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "zero_gravity/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
