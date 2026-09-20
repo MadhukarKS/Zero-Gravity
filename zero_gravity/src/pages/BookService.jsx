@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import CustomSelect from "@/components/ui/CustomSelect";
 import { WHATSAPP_NUMBER } from "@/lib/cart";
 
 const SERVICE_TYPES = [
@@ -130,17 +131,15 @@ export default function BookService() {
                 {/* Service Type */}
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Service Requirement</label>
-                  <select
+                  <CustomSelect
                     value={serviceType}
-                    onChange={(e) => setServiceType(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer font-body"
-                  >
-                    {SERVICE_TYPES.map((t) => (
-                      <option key={t} value={t} className="bg-card text-foreground">
-                        {t}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setServiceType(val)}
+                    placeholder="Select Service Package"
+                    options={SERVICE_TYPES.map((t) => ({
+                      value: t,
+                      label: t,
+                    }))}
+                  />
                 </div>
 
                 {/* Date */}

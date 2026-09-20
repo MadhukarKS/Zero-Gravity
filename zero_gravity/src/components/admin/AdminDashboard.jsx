@@ -19,6 +19,7 @@ import {
   Edit2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import CustomSelect from "@/components/ui/CustomSelect";
 import {
   fetchProductsAdmin,
   fetchCategories,
@@ -290,50 +291,54 @@ export default function AdminDashboard({ user, onLogout }) {
             </div>
 
             {/* Category Filter */}
-            <div className="min-w-[130px]">
-              <select
+            <div className="min-w-[150px]">
+              <CustomSelect
+                size="sm"
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-[#e5a93b] cursor-pointer"
-              >
-                <option value="all">All Categories</option>
-                {categories.map((c) => (
-                  <option key={c.category_id} value={c.category_id}>
-                    {c.category_name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setSelectedCategory(val)}
+                placeholder="All Categories"
+                options={[
+                  { value: "all", label: "All Categories" },
+                  ...categories.map((c) => ({
+                    value: c.category_id,
+                    label: c.category_name,
+                  })),
+                ]}
+              />
             </div>
 
             {/* Brand Filter */}
-            <div className="min-w-[130px]">
-              <select
+            <div className="min-w-[140px]">
+              <CustomSelect
+                size="sm"
                 value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-[#e5a93b] cursor-pointer"
-              >
-                <option value="all">All Brands</option>
-                {brands.map((b) => (
-                  <option key={b.brand_id} value={b.brand_id}>
-                    {b.brand_name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setSelectedBrand(val)}
+                placeholder="All Brands"
+                options={[
+                  { value: "all", label: "All Brands" },
+                  ...brands.map((b) => ({
+                    value: b.brand_id,
+                    label: b.brand_name,
+                  })),
+                ]}
+              />
             </div>
 
             {/* Status Filter */}
-            <div className="min-w-[120px]">
-              <select
+            <div className="min-w-[140px]">
+              <CustomSelect
+                size="sm"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-zinc-300 focus:outline-none focus:border-[#e5a93b] cursor-pointer"
-              >
-                <option value="all">All Statuses</option>
-                <option value="active">Active Only</option>
-                <option value="inactive">Inactive Only</option>
-                <option value="featured">Featured Only</option>
-                <option value="new">New Arrivals Only</option>
-              </select>
+                onChange={(val) => setStatusFilter(val)}
+                placeholder="All Statuses"
+                options={[
+                  { value: "all", label: "All Statuses" },
+                  { value: "active", label: "Active Only" },
+                  { value: "inactive", label: "Inactive Only" },
+                  { value: "featured", label: "Featured Only" },
+                  { value: "new", label: "New Arrivals Only" },
+                ]}
+              />
             </div>
           </div>
 
