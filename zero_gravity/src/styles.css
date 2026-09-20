@@ -65,7 +65,7 @@ h1, h2, h3, h4 {
 }
 
 .text-glow {
-  text-shadow: 0 0 20px rgba(229, 169, 59, 0.6), 0 0 40px rgba(229, 169, 59, 0.3);
+  text-shadow: none;
 }
 
 .btn-yellow {

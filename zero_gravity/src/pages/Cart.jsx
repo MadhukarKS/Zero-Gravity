@@ -21,7 +21,7 @@ export default function Cart() {
         <div className="max-w-6xl mx-auto">
           <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-3">— Your Selection —</div>
           <h1 className="font-display font-black text-4xl md:text-6xl">
-            Your <span className="text-yellow text-glow">Cart</span>
+            Your <span className="text-yellow">Cart</span>
           </h1>
         </div>
       </section>

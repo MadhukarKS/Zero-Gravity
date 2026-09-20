@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Lock, User, Eye, EyeOff, ShieldCheck, ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { Lock, User, Eye, EyeOff, ShieldCheck, ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { adminLogin } from "@/lib/supabase";
 
@@ -36,11 +36,6 @@ export default function AdminLogin({ onLoginSuccess }) {
     }
   };
 
-  const handleQuickFill = () => {
-    setIdentifier("admin");
-    setPassword("AdminPassword@123");
-    setErrorMsg("");
-  };
 
   return (
     <div className="min-h-screen bg-[#08090c] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden selection:bg-[#e5a93b] selection:text-black">
@@ -142,18 +137,6 @@ export default function AdminLogin({ onLoginSuccess }) {
           </button>
         </form>
 
-        {/* Quick fill helper for easy testing */}
-        <div className="mt-8 pt-6 border-t border-zinc-800/80 flex flex-col items-center gap-2">
-          <p className="text-xs text-zinc-500">Quick Dev Credentials:</p>
-          <button
-            type="button"
-            onClick={handleQuickFill}
-            className="inline-flex items-center gap-1.5 text-xs text-[#e5a93b] hover:underline bg-[#e5a93b]/10 border border-[#e5a93b]/20 px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            Fill default admin credentials
-          </button>
-        </div>
       </div>
     </div>
   );

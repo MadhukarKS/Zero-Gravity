@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import HeroAnimation from "@/components/HeroAnimation";
 import FloatingParts from "@/components/FloatingParts";
 import LoadingScreen from "@/components/LoadingScreen";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ProductCard from "@/components/ProductCard";
 import himalayanYellow from "@/assets/himalayan-yellow.jpg";
 import bikeRx100 from "@/assets/bike-rx100.jpg";
 import bikeR15 from "@/assets/bike-r15.jpg";
 import bikeGt650 from "@/assets/bike-gt650.jpg";
 import { motion } from "motion/react";
-
-import { ACCESSORIES } from "@/lib/accessories";
-import { useCart, buildWhatsAppSingleUrl } from "@/lib/cart";
+import { PackageOpen } from "lucide-react";
+import { fetchPublicProducts } from "@/lib/supabase";
 
 const SERVICES = [
   {
@@ -85,7 +86,28 @@ function SectionLabel({ kicker, title, sub }) {
 }
 
 export default function Home() {
-  const { add } = useCart();
+  const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadProducts() {
+      try {
+        const { data, error } = await fetchPublicProducts();
+        if (!error && mounted) {
+          setProducts(data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load products for homepage:", err);
+      } finally {
+        if (mounted) setLoadingProducts(false);
+      }
+    }
+    loadProducts();
+    return () => {
+      mounted = false;
+    };
+  }, []);
   return (
     <div id="top" className="relative bg-background text-foreground">
       <LoadingScreen />
@@ -180,7 +202,7 @@ export default function Home() {
           >
             <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-4">— Our Story —</div>
             <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
-              Built for <span className="text-yellow text-glow">Riders</span>,<br />
+              Built for <span className="text-yellow">Riders</span>,<br />
               Not Just Bikes.
             </h2>
             <p className="mt-6 text-foreground/75 leading-relaxed text-sm md:text-base font-body">
@@ -370,64 +392,67 @@ export default function Home() {
             title="Premium Accessories"
             sub="Helmets · Jackets · Gloves · Boots · Exhausts · Eyewear — every riding gear you need, curated and ZG-approved."
           />
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {ACCESSORIES.slice(0, 4).map((a, i) => {
-              return (
-                <motion.div
-                  key={a.id}
-                  className="card-dark overflow-hidden group flex flex-col"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+          {loadingProducts ? (
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl bg-[#12141c]/60 border border-zinc-800/60 overflow-hidden animate-pulse flex flex-col"
                 >
-                  <div className="relative aspect-square overflow-hidden bg-black">
-                    <img
-                      src={a.img}
-                      alt={a.name}
-                      loading="lazy"
-                      width={800}
-                      height={800}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute top-3 left-3 bg-yellow text-primary-foreground text-[10px] font-display font-black tracking-widest px-2 py-1 rounded">
-                      {a.cat}
-                    </div>
-                  </div>
+                  <div className="aspect-square bg-zinc-800/40 w-full" />
                   <div className="p-5 flex flex-col gap-3 flex-1">
-                    <div>
-                      <h3 className="font-display font-bold text-sm md:text-base leading-tight">{a.name}</h3>
-                      <p className="text-yellow text-sm mt-1 font-bold">{a.price}</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 mt-auto">
-                      <button
-                        onClick={() => add({ id: a.id, name: a.name, cat: a.cat, price: a.price, img: a.img })}
-                        className="text-[10px] tracking-[0.25em] uppercase border border-yellow/40 text-yellow rounded-md py-2 hover:bg-yellow hover:text-primary-foreground transition-all duration-300 cursor-pointer text-center font-semibold"
-                      >
-                        + Cart
-                      </button>
-                      <a
-                        href={buildWhatsAppSingleUrl(a)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[10px] tracking-[0.25em] uppercase bg-yellow text-primary-foreground rounded-md py-2 font-bold hover:brightness-110 transition-all duration-300 text-center flex items-center justify-center cursor-pointer"
-                      >
-                        Order
-                      </a>
+                    <div className="h-4 w-3/4 bg-zinc-800/70 rounded" />
+                    <div className="h-6 w-1/2 bg-zinc-800/70 rounded mt-4" />
+                    <div className="grid grid-cols-2 gap-2 pt-2 mt-auto">
+                      <div className="h-9 bg-zinc-800/60 rounded-xl" />
+                      <div className="h-9 bg-zinc-800/60 rounded-xl" />
                     </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/accessories" className="btn-yellow">
-              Explore All Accessories →
-            </Link>
-            <div className="text-[10px] tracking-[0.4em] uppercase text-foreground/40 mt-4 font-semibold">
-              {ACCESSORIES.length}+ products · Add to cart · Order on WhatsApp
+                </div>
+              ))}
             </div>
-          </div>
+          ) : products.length === 0 ? (
+            <div className="rounded-2xl bg-[#11131a] border border-zinc-800 p-8 md:p-12 text-center max-w-xl mx-auto">
+              <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mx-auto mb-4">
+                <PackageOpen className="w-7 h-7" />
+              </div>
+              <h3 className="font-bold text-xl text-white mb-2">
+                Accessories Vault Updating Soon
+              </h3>
+              <p className="text-zinc-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+                Our upcoming collection of factory-spec gear, helmets, and performance components is currently being cataloged. Reach out to us directly for live stock availability.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href="https://wa.me/917892318639?text=Hi%20Zero%20Gravity,%20I'd%20like%20to%20inquire%20about%20accessories%20and%20riding%20gear."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-yellow text-xs cursor-pointer"
+                >
+                  Inquire on WhatsApp →
+                </a>
+                <Link to="/book-service" className="btn-ghost-yellow text-xs">
+                  Book Bike Service
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+                {products.slice(0, 4).map((prod) => (
+                  <ProductCard key={prod.product_id || prod.id} product={prod} />
+                ))}
+              </div>
+              <div className="text-center mt-12">
+                <Link to="/accessories" className="btn-yellow">
+                  Explore All Accessories ({products.length}) →
+                </Link>
+                <div className="text-[10px] tracking-[0.4em] uppercase text-foreground/40 mt-4 font-semibold">
+                  Live inventory from database · Add to cart · Order on WhatsApp
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </motion.section>
 

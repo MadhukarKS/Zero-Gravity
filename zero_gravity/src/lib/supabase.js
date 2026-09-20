@@ -175,6 +175,33 @@ export async function deleteBrand(brand_id) {
 // PRODUCTS CRUD
 // -------------------------------------------------------------
 
+export async function fetchPublicProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      product_id,
+      product_name,
+      category_id,
+      product_brand,
+      product_qty,
+      product_price,
+      product_description,
+      product_image,
+      "isAvailable",
+      "isNew",
+      "isFeatured",
+      "isActive",
+      created_at,
+      category_master ( category_id, category_name ),
+      brand_master ( brand_id, brand_name )
+    `)
+    .eq("isActive", 1)
+    .order("isFeatured", { ascending: false })
+    .order("product_id", { ascending: false });
+
+  return { data: data || [], error };
+}
+
 export async function fetchProductsAdmin() {
   const { data, error } = await supabase
     .from("products")

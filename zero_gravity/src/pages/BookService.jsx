@@ -52,7 +52,7 @@ export default function BookService() {
         <div className="max-w-4xl mx-auto relative z-10 text-center">
           <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-3 font-semibold">— Service Station —</div>
           <h1 className="font-display font-black text-4xl md:text-6xl">
-            Book Your <span className="text-yellow text-glow">Service</span>
+            Book Your <span className="text-yellow">Service</span>
           </h1>
           <p className="mt-4 text-foreground/85 max-w-lg mx-auto text-sm md:text-base leading-relaxed font-body">
             Fill in the details below to schedule your custom build, upgrade, or service. Let's make your machine rise above.
