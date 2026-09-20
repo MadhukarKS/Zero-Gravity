@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import CustomSelect from "@/components/ui/CustomSelect";
 import {
   ArrowLeft,
   Upload,
   Image as ImageIcon,
   Loader2,
   Check,
-  Sparkles,
+  Sliders,
   Package,
   Layers,
   Tag,
@@ -302,39 +303,33 @@ export default function AddProductPage() {
                     <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                       Category <span className="text-[#e5a93b]">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       value={categoryId}
-                      onChange={(e) => setCategoryId(e.target.value)}
-                      required
-                      className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm cursor-pointer"
-                    >
-                      <option value="" disabled>
-                        Select Category
-                      </option>
-                      {categories.map((cat) => (
-                        <option key={cat.category_id} value={cat.category_id}>
-                          {cat.category_name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => setCategoryId(val)}
+                      placeholder="Select Category"
+                      options={categories.map((cat) => ({
+                        value: cat.category_id,
+                        label: cat.category_name,
+                      }))}
+                    />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                       Brand (Optional)
                     </label>
-                    <select
+                    <CustomSelect
                       value={brandId}
-                      onChange={(e) => setBrandId(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm cursor-pointer"
-                    >
-                      <option value="">Select Brand (Optional)</option>
-                      {brands.map((b) => (
-                        <option key={b.brand_id} value={b.brand_id}>
-                          {b.brand_name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => setBrandId(val)}
+                      placeholder="Select Brand (Optional)"
+                      options={[
+                        { value: "", label: "No Brand (None)" },
+                        ...brands.map((b) => ({
+                          value: b.brand_id,
+                          label: b.brand_name,
+                        })),
+                      ]}
+                    />
                   </div>
                 </div>
 
@@ -393,10 +388,10 @@ export default function AddProductPage() {
               </div>
 
               {/* Status & Visibility Flags Card */}
-              <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-6 space-y-4 shadow-xl">
+              <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                   <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#e5a93b]" />
+                    <Sliders className="w-4 h-4 text-zinc-400" />
                     Status & Visibility Flags
                   </h2>
                   <span className="text-[11px] text-zinc-500 font-medium">1 = Enabled, 0 = Disabled</span>
@@ -405,9 +400,9 @@ export default function AddProductPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {/* isActive */}
                   <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-colors cursor-pointer select-none ${
                       isActive
-                        ? "bg-[#e5a93b]/10 border-[#e5a93b]/50 shadow-[0_0_15px_rgba(229,169,59,0.15)]"
+                        ? "bg-[#161824] border-zinc-700"
                         : "bg-[#0a0b10] border-zinc-800/80 hover:border-zinc-700"
                     }`}
                   >
@@ -421,8 +416,10 @@ export default function AddProductPage() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-white">isActive</span>
                         <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            isActive ? "bg-[#e5a93b] text-black" : "bg-zinc-800 text-zinc-500"
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                            isActive
+                              ? "bg-zinc-800 text-[#e5a93b] border-zinc-700"
+                              : "bg-zinc-900 text-zinc-500 border-zinc-800"
                           }`}
                         >
                           {isActive ? "Active (1)" : "Inactive (0)"}
@@ -436,9 +433,9 @@ export default function AddProductPage() {
 
                   {/* isAvailable */}
                   <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-colors cursor-pointer select-none ${
                       isAvailable
-                        ? "bg-emerald-950/30 border-emerald-700/60 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                        ? "bg-[#161824] border-zinc-700"
                         : "bg-[#0a0b10] border-zinc-800/80 hover:border-zinc-700"
                     }`}
                   >
@@ -452,10 +449,10 @@ export default function AddProductPage() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-white">isAvailable</span>
                         <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
                             isAvailable
-                              ? "bg-emerald-500 text-black"
-                              : "bg-zinc-800 text-zinc-500"
+                              ? "bg-zinc-800 text-emerald-400 border-zinc-700"
+                              : "bg-zinc-900 text-zinc-500 border-zinc-800"
                           }`}
                         >
                           {isAvailable ? "In Stock (1)" : "Out of Stock (0)"}
@@ -469,9 +466,9 @@ export default function AddProductPage() {
 
                   {/* isNew */}
                   <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-colors cursor-pointer select-none ${
                       isNew
-                        ? "bg-cyan-950/30 border-cyan-700/60 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+                        ? "bg-[#161824] border-zinc-700"
                         : "bg-[#0a0b10] border-zinc-800/80 hover:border-zinc-700"
                     }`}
                   >
@@ -485,8 +482,10 @@ export default function AddProductPage() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-white">isNew</span>
                         <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            isNew ? "bg-cyan-400 text-black" : "bg-zinc-800 text-zinc-500"
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                            isNew
+                              ? "bg-zinc-800 text-cyan-400 border-zinc-700"
+                              : "bg-zinc-900 text-zinc-500 border-zinc-800"
                           }`}
                         >
                           {isNew ? "New Arrival (1)" : "Standard (0)"}
@@ -500,9 +499,9 @@ export default function AddProductPage() {
 
                   {/* isFeatured */}
                   <label
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer select-none ${
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-colors cursor-pointer select-none ${
                       isFeatured
-                        ? "bg-amber-950/30 border-amber-700/60 shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+                        ? "bg-[#161824] border-zinc-700"
                         : "bg-[#0a0b10] border-zinc-800/80 hover:border-zinc-700"
                     }`}
                   >
@@ -516,8 +515,10 @@ export default function AddProductPage() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-white">isFeatured</span>
                         <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            isFeatured ? "bg-amber-400 text-black" : "bg-zinc-800 text-zinc-500"
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+                            isFeatured
+                              ? "bg-zinc-800 text-amber-400 border-zinc-700"
+                              : "bg-zinc-900 text-zinc-500 border-zinc-800"
                           }`}
                         >
                           {isFeatured ? "Featured (1)" : "Standard (0)"}

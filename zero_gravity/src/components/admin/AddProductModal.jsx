@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { X, Upload, Image as ImageIcon, Loader2, Check, Sparkles } from "lucide-react";
+import { X, Upload, Image as ImageIcon, Loader2, Check, Package } from "lucide-react";
 import { uploadProductImage, createProduct } from "@/lib/supabase";
+import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function AddProductModal({ isOpen, onClose, categories, brands, onProductAdded }) {
   const [productName, setProductName] = useState("");
@@ -108,8 +109,8 @@ export default function AddProductModal({ isOpen, onClose, categories, brands, o
         {/* Header */}
         <div className="px-6 py-5 border-b border-zinc-800/80 flex items-center justify-between bg-[#151722]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#e5a93b]/10 border border-[#e5a93b]/30 flex items-center justify-center text-[#e5a93b]">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[#e5a93b]">
+              <Package className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white font-display uppercase tracking-wide">
@@ -158,39 +159,33 @@ export default function AddProductModal({ isOpen, onClose, categories, brands, o
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                 Category <span className="text-[#e5a93b]">*</span>
               </label>
-              <select
+              <CustomSelect
                 value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                required
-                className="w-full px-4 py-2.5 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all cursor-pointer"
-              >
-                <option value="" disabled>
-                  Select Category
-                </option>
-                {categories.map((cat) => (
-                  <option key={cat.category_id} value={cat.category_id}>
-                    {cat.category_name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setCategoryId(val)}
+                placeholder="Select Category"
+                options={categories.map((cat) => ({
+                  value: cat.category_id,
+                  label: cat.category_name,
+                }))}
+              />
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                 Brand
               </label>
-              <select
+              <CustomSelect
                 value={brandId}
-                onChange={(e) => setBrandId(e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all cursor-pointer"
-              >
-                <option value="">Select Brand (Optional)</option>
-                {brands.map((b) => (
-                  <option key={b.brand_id} value={b.brand_id}>
-                    {b.brand_name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setBrandId(val)}
+                placeholder="Select Brand (Optional)"
+                options={[
+                  { value: "", label: "No Brand (None)" },
+                  ...brands.map((b) => ({
+                    value: b.brand_id,
+                    label: b.brand_name,
+                  })),
+                ]}
+              />
             </div>
           </div>
 
