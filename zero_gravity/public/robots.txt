@@ -1,8 +1,3 @@
-# ==========================================
-# ZERO GRAVITY - ROBOTS.TXT
-# Crawler Directives & Indexing Instructions
-# ==========================================
-
 User-agent: *
 
 # Allow crawling of all public user-facing pages and assets
@@ -29,4 +24,4 @@ Disallow: /admin/*
 Allow: /googlee12270ab9a7ce3d1.html
 
 # Sitemap location
-Sitemap: https://zerogravity.com/sitemap.xml
+Sitemap: https://zerogravity.co.in/sitemap.xml
