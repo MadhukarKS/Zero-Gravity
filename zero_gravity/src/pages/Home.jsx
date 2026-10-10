@@ -131,12 +131,12 @@ const TESTIMONIALS = [
 
 function SectionLabel({ kicker, title, sub }) {
   return (
-    <div className="text-center mb-10 sm:mb-14 px-2">
-      <div className="text-yellow text-[11px] sm:text-xs tracking-[0.4em] sm:tracking-[0.5em] uppercase mb-2 sm:mb-3 font-semibold">— {kicker} —</div>
-      <h2 className="font-display font-black text-3xl sm:text-4xl md:text-6xl text-foreground tracking-tight">
+    <div className="text-center mb-4 sm:mb-5 px-2">
+      <div className="text-yellow text-[10px] sm:text-xs tracking-[0.35em] sm:tracking-[0.45em] uppercase mb-1 sm:mb-1.5 font-semibold">— {kicker} —</div>
+      <h2 className="font-display font-black text-2xl sm:text-3xl md:text-5xl text-foreground tracking-tight">
         {title}
       </h2>
-      {sub && <p className="mt-3 sm:mt-4 text-foreground/60 max-w-2xl mx-auto font-body text-xs sm:text-sm md:text-base leading-relaxed">{sub}</p>}
+      {sub && <p className="mt-1.5 sm:mt-2 text-foreground/60 max-w-2xl mx-auto font-body text-xs sm:text-sm leading-relaxed">{sub}</p>}
     </div>
   );
 }
@@ -268,7 +268,7 @@ export default function Home() {
       {/* ABOUT */}
       <motion.section
         id="about"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
+        className="relative py-5 sm:py-7 md:py-8 px-4 sm:px-6 overflow-hidden"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -326,7 +326,7 @@ export default function Home() {
         </div>
 
         {/* FOUNDER MESSAGE CARD */}
-        <div className="max-w-5xl mx-auto mt-14 sm:mt-24 relative">
+        <div className="max-w-5xl mx-auto mt-5 sm:mt-7 relative">
           <motion.div
             className="card-dark p-6 sm:p-8 md:p-12 relative overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
@@ -396,7 +396,7 @@ export default function Home() {
       {/* SERVICES */}
       <motion.section
         id="services"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-background via-card/25 to-background"
+        className="relative py-5 sm:py-7 md:py-8 px-4 sm:px-6 bg-gradient-to-b from-background via-card/25 to-background"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -475,7 +475,7 @@ export default function Home() {
       {/* GALLERY */}
       <motion.section
         id="gallery"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
+        className="relative py-5 sm:py-7 md:py-8 px-4 sm:px-6 overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -588,7 +588,7 @@ export default function Home() {
       {/* ACCESSORIES TEASER */}
       <motion.section
         id="shop"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-card/20 border-y border-border"
+        className="relative py-5 sm:py-7 md:py-8 px-4 sm:px-6 bg-card/20 border-y border-border"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -603,7 +603,7 @@ export default function Home() {
 
           {/* Interactive Category Filter Pills */}
           {!loadingProducts && products.length > 0 && categories.length > 1 && (
-            <div className="flex flex-wrap items-center justify-center gap-2 mb-8 sm:mb-10">
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-4 sm:mb-5">
               {categories.map((c) => (
                 <button
                   key={c}
@@ -672,7 +672,7 @@ export default function Home() {
                   <ProductCard key={prod.product_id || prod.id} product={prod} />
                 ))}
               </div>
-              <div className="text-center mt-10 sm:mt-12">
+              <div className="text-center mt-5 sm:mt-6">
                 <Link to="/accessories" className="btn-yellow w-full sm:w-auto text-center justify-center">
                   Explore All Accessories ({products.length}) →
                 </Link>
@@ -687,7 +687,7 @@ export default function Home() {
 
       {/* TESTIMONIALS - INFINITE MARQUEE */}
       <motion.section
-        className="relative py-12 sm:py-16 overflow-hidden border-t border-zinc-800/80 bg-background"
+        className="relative py-5 sm:py-7 md:py-8 overflow-hidden border-t border-zinc-800/80 bg-background"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -760,7 +760,7 @@ export default function Home() {
       {/* CONTACT & WORKSHOP LOCATION */}
       <motion.section
         id="contact"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#0a0b0e] to-[#050608] border-t border-zinc-800"
+        className="relative py-5 sm:py-7 md:py-8 px-4 sm:px-6 bg-gradient-to-b from-[#0a0b0e] to-[#050608] border-t border-zinc-800"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}

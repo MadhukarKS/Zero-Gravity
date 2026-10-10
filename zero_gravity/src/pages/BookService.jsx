@@ -87,7 +87,7 @@ export default function BookService() {
       <Nav />
 
       {/* Header */}
-      <section className="relative pt-28 sm:pt-36 pb-10 sm:pb-14 px-4 sm:px-6 border-b border-zinc-800/80 overflow-hidden bg-[#08090d]">
+      <section className="relative pt-24 sm:pt-28 pb-8 sm:pb-10 px-4 sm:px-6 border-b border-zinc-800/80 overflow-hidden bg-[#08090d]">
         {/* Soft luxurious ambient radial glow in the center */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(229,169,59,0.12),transparent_75%)] pointer-events-none" />
 
@@ -106,7 +106,7 @@ export default function BookService() {
       </section>
 
       {/* Main Form & Sidebar Section */}
-      <section className="py-8 sm:py-14 px-4 sm:px-6 flex-1 max-w-6xl mx-auto w-full">
+      <section className="py-6 sm:py-10 px-4 sm:px-6 flex-1 max-w-6xl mx-auto w-full">
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           {/* Main Form Column (8 cols) */}
           <div className="lg:col-span-8">

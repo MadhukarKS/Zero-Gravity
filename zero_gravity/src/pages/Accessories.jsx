@@ -205,7 +205,7 @@ export default function Accessories() {
       <Nav />
 
       {/* Header & Clean Filter Bar */}
-      <section className="relative pt-24 sm:pt-32 pb-8 sm:pb-12 px-4 sm:px-6 border-b border-zinc-800 bg-[#0c0d12]">
+      <section className="relative pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-6 border-b border-zinc-800 bg-[#0c0d12]">
         <div className="max-w-7xl mx-auto">
           <div className="text-yellow text-xs tracking-widest uppercase mb-2 sm:mb-3 font-semibold">
             — Store Inventory —
@@ -312,7 +312,7 @@ export default function Accessories() {
       </section>
 
       {/* Main Content Area */}
-      <section className="py-8 sm:py-12 px-4 sm:px-6 flex-1">
+      <section className="py-6 sm:py-8 px-4 sm:px-6 flex-1">
         <div className="max-w-7xl mx-auto">
           {/* Header count info */}
           <div className="flex items-center justify-between mb-6 sm:mb-8 pb-3 sm:pb-4 border-b border-zinc-800">

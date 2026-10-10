@@ -24,7 +24,7 @@ export default function Cart() {
     <div className="relative bg-background text-foreground min-h-screen flex flex-col">
       <Nav />
 
-      <section className="pt-24 sm:pt-32 pb-8 sm:pb-10 px-4 sm:px-6 border-b border-yellow/10 bg-grid">
+      <section className="pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-6 border-b border-yellow/10 bg-grid">
         <div className="max-w-6xl mx-auto">
           <div className="text-yellow text-xs tracking-[0.4em] uppercase mb-2 sm:mb-3 font-semibold">— Your Selection —</div>
           <h1 className="font-display font-black text-3xl sm:text-4xl md:text-6xl text-white">
@@ -33,10 +33,10 @@ export default function Cart() {
         </div>
       </section>
 
-      <section className="py-8 sm:py-16 px-4 sm:px-6 flex-1">
+      <section className="py-6 sm:py-10 px-4 sm:px-6 flex-1">
         <div className="max-w-6xl mx-auto">
           {items.length === 0 ? (
-            <div className="card-dark p-8 sm:p-16 text-center max-w-lg mx-auto">
+            <div className="card-dark p-8 sm:p-12 text-center max-w-lg mx-auto">
               <p className="text-foreground/60 mb-6 font-body text-sm sm:text-base">Your cart is empty. Time to gear up.</p>
               <Link to="/accessories" className="btn-yellow text-xs sm:text-sm">Browse Accessories</Link>
             </div>

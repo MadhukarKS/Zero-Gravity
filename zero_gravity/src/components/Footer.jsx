@@ -16,10 +16,10 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-800/80 bg-[#08090d] pt-14 pb-8 px-4 sm:px-6 lg:px-8 text-foreground">
+    <footer className="border-t border-zinc-800/80 bg-[#08090d] pt-10 pb-6 px-4 sm:px-6 lg:px-8 text-foreground">
       <div className="max-w-7xl mx-auto">
         {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-zinc-800/70">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-zinc-800/70">
           {/* Col 1: Brand & Identity (4 Cols) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">

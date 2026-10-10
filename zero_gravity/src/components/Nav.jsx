@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "@/lib/cart";
 import zeroGravityLogo from "@/assets/zero_gravity.jpeg";
 import {
@@ -6,12 +7,31 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
 
 export default function Nav() {
   const { count } = useCart();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (to) => {
+    setOpen(false);
+    if (to.startsWith("/#")) {
+      const hash = to.replace("/#", "");
+      if (location.pathname === "/") {
+        // Already on home, scroll to target after drawer starts closing
+        setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 120);
+      } else {
+        navigate(to);
+      }
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full max-w-full z-50 backdrop-blur-xl bg-background/80 border-b border-yellow/15">
@@ -68,9 +88,10 @@ export default function Nav() {
 
           {/* Mobile Navigation Drawer Trigger */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
                 <button
+                  type="button"
                   aria-label="Open Navigation Menu"
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-border bg-card/80 flex items-center justify-center text-foreground hover:border-yellow hover:text-yellow transition-colors cursor-pointer"
                 >
@@ -81,76 +102,97 @@ export default function Nav() {
                   </svg>
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0f1118] border-l border-border p-6 text-foreground w-[290px] sm:w-80 flex flex-col justify-between z-[100]">
-                <div>
-                  <SheetHeader className="pb-5 border-b border-border/80 flex flex-row items-center gap-3">
+              <SheetContent
+                side="right"
+                className="bg-[#0b0c10] border-l border-zinc-800 p-5 text-foreground w-[85vw] max-w-[320px] max-h-[100dvh] h-[100dvh] flex flex-col justify-between overflow-y-auto z-[100]"
+              >
+                <div className="space-y-5">
+                  <SheetHeader className="pb-4 border-b border-zinc-800/80 flex flex-row items-center gap-3 pr-10">
                     <img
                       src={zeroGravityLogo}
                       alt="Zero Gravity"
-                      className="w-9 h-9 rounded-full object-cover ring-1 ring-yellow/30"
+                      className="w-9 h-9 rounded-full object-cover ring-1 ring-yellow/30 shrink-0"
                     />
-                    <div className="text-left">
-                      <SheetTitle className="font-display font-black text-base uppercase tracking-wider text-yellow">
+                    <div className="text-left min-w-0">
+                      <SheetTitle className="font-display font-black text-sm uppercase tracking-wider text-yellow truncate">
                         ZERO GRAVITY
                       </SheetTitle>
-                      <p className="text-[10px] tracking-widest text-zinc-400 uppercase font-body mt-0.5">
+                      <p className="text-[9px] tracking-widest text-zinc-400 uppercase font-body mt-0.5 truncate">
                         The Bikers Destination
                       </p>
                     </div>
+                    <SheetDescription className="sr-only">
+                      Mobile navigation menu
+                    </SheetDescription>
                   </SheetHeader>
 
-                  <div className="py-6 flex flex-col gap-3.5 text-xs uppercase font-semibold tracking-widest">
-                    <SheetClose asChild>
-                      <Link to="/#about" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors">
-                        About Studio
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link to="/#services" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors">
-                        Services & Tuning
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link to="/#gallery" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors">
-                        Custom Builds
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link to="/accessories" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between">
-                        <span>Accessories Vault</span>
-                        <span className="text-[9px] bg-yellow/15 text-yellow px-2 py-0.5 rounded font-bold">STORE</span>
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link to="/cart" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between">
-                        <span>Shopping Cart</span>
-                        {count > 0 && (
-                          <span className="text-[9px] bg-yellow text-black px-2 py-0.5 rounded-full font-bold">{count}</span>
-                        )}
-                      </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Link to="/#contact" className="p-2 rounded-lg hover:bg-zinc-800/60 hover:text-yellow transition-colors">
-                        Contact & Garage
-                      </Link>
-                    </SheetClose>
+                  <div className="flex flex-col gap-1.5 text-xs uppercase font-semibold tracking-wider font-body">
+                    <Link
+                      to="/#about"
+                      onClick={() => handleNavClick("/#about")}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>About Studio</span>
+                      <span className="text-zinc-600 text-xs">→</span>
+                    </Link>
+                    <Link
+                      to="/#services"
+                      onClick={() => handleNavClick("/#services")}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>Services & Tuning</span>
+                      <span className="text-zinc-600 text-xs">→</span>
+                    </Link>
+                    <Link
+                      to="/#gallery"
+                      onClick={() => handleNavClick("/#gallery")}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>Custom Builds</span>
+                      <span className="text-zinc-600 text-xs">→</span>
+                    </Link>
+                    <Link
+                      to="/accessories"
+                      onClick={() => setOpen(false)}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>Accessories Vault</span>
+                      <span className="text-[9px] bg-yellow/15 text-yellow px-2 py-0.5 rounded font-bold">STORE</span>
+                    </Link>
+                    <Link
+                      to="/cart"
+                      onClick={() => setOpen(false)}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>Shopping Cart</span>
+                      {count > 0 && (
+                        <span className="text-[9px] bg-yellow text-black px-2 py-0.5 rounded-full font-bold">{count}</span>
+                      )}
+                    </Link>
+                    <Link
+                      to="/#contact"
+                      onClick={() => handleNavClick("/#contact")}
+                      className="px-3 py-2.5 rounded-xl hover:bg-zinc-800/60 hover:text-yellow transition-colors flex items-center justify-between"
+                    >
+                      <span>Contact & Garage</span>
+                      <span className="text-zinc-600 text-xs">→</span>
+                    </Link>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-border/80 space-y-3">
-                  <SheetClose asChild>
-                    <Link
-                      to="/book-service"
-                      className="btn-yellow w-full justify-center text-center py-2.5 text-xs block"
-                    >
-                      Book Service Slot
-                    </Link>
-                  </SheetClose>
+                <div className="pt-4 border-t border-zinc-800/80 space-y-2.5 mt-4">
+                  <Link
+                    to="/book-service"
+                    onClick={() => setOpen(false)}
+                    className="btn-yellow w-full justify-center text-center py-2.5 text-xs block"
+                  >
+                    Book Service Slot
+                  </Link>
                   <a
                     href="https://wa.me/917892318639"
                     target="_blank"
                     rel="noreferrer"
-                    className="btn-ghost-yellow w-full justify-center text-center py-2 text-xs flex items-center gap-1.5"
+                    className="btn-ghost-yellow w-full justify-center text-center py-2 text-xs flex items-center justify-center gap-1.5"
                   >
                     <span>WhatsApp Garage</span>
                   </a>
