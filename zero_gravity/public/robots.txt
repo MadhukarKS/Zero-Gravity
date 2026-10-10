@@ -5,7 +5,6 @@ Allow: /
 Allow: /accessories
 Allow: /book-service
 Allow: /cart
-Allow: /src/assets/
 Allow: /assets/
 Allow: /*.jpg$
 Allow: /*.jpeg$
@@ -24,4 +23,4 @@ Disallow: /admin/*
 Allow: /googlee12270ab9a7ce3d1.html
 
 # Sitemap location
-Sitemap: https://zerogravity.co.in/sitemap.xml
+Sitemap: https://www.zerogravity.co.in/sitemap.xml
