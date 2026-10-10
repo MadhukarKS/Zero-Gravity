@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { getCurrentAdmin, supabase, adminLogout } from "@/lib/supabase";
 import AdminLogin from "./AdminLogin";
+import zeroGravityLogo from "@/assets/zero_gravity.jpeg";
 
 export default function AdminLayout({ children }) {
   const location = useLocation();
@@ -132,20 +133,22 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#08090c] text-white flex">
+    <div className="admin-theme min-h-screen bg-[#090a0f] text-zinc-100 flex">
       {/* Desktop Sidebar (Fixed Left) */}
       <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-[#0d0f17] border-r border-zinc-800/80 z-30">
         {/* Sidebar Header / Brand Logo */}
         <div className="px-6 py-5 border-b border-zinc-800/80 flex items-center justify-between">
           <Link to="/admin" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#e5a93b] to-[#f5af3f] flex items-center justify-center font-bold text-black shadow-[0_0_20px_rgba(229,169,59,0.35)] group-hover:scale-105 transition-transform">
-              ZG
-            </div>
+            <img
+              src={zeroGravityLogo}
+              alt="Zero Gravity"
+              className="w-10 h-10 rounded-xl object-cover ring-1 ring-zinc-700/80 group-hover:scale-105 transition-transform shrink-0"
+            />
             <div>
-              <span className="text-sm font-extrabold uppercase tracking-wider font-display text-white block">
+              <span className="text-sm font-bold text-white block tracking-wide">
                 Zero Gravity
               </span>
-              <span className="text-[10px] uppercase font-bold text-[#e5a93b] tracking-widest block">
+              <span className="text-[10px] uppercase font-semibold text-[#e5a93b] tracking-wider block">
                 Admin Console
               </span>
             </div>
@@ -154,7 +157,7 @@ export default function AdminLayout({ children }) {
 
         {/* Navigation Links */}
         <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-          <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+          <div className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
             Navigation
           </div>
 
@@ -164,21 +167,21 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-semibold transition-all group ${
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-colors group ${
                   item.active
-                    ? "bg-[#e5a93b] text-black shadow-[0_0_20px_rgba(229,169,59,0.25)] font-bold"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/60"
+                    ? "bg-[#e5a93b] text-zinc-950 font-semibold"
+                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/60 font-medium"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     className={`w-4 h-4 ${
-                      item.active ? "text-black" : "text-zinc-500 group-hover:text-[#e5a93b]"
+                      item.active ? "text-zinc-950" : "text-zinc-400 group-hover:text-zinc-200"
                     } transition-colors`}
                   />
                   <span>{item.name}</span>
                 </div>
-                {item.active && <ChevronRight className="w-4 h-4 text-black" />}
+                {item.active && <ChevronRight className="w-4 h-4 text-zinc-950" />}
               </Link>
             );
           })}
@@ -216,7 +219,7 @@ export default function AdminLayout({ children }) {
         <div className="p-4 border-t border-zinc-800/80 bg-[#0a0b10]/60 space-y-3">
           <div className="flex items-center gap-3 px-2">
             <div className="w-9 h-9 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[#e5a93b] shrink-0">
-              <Shield className="w-4 h-4" />
+              <User className="w-4 h-4" />
             </div>
             <div className="truncate flex-1">
               <p className="text-xs font-bold text-white truncate">
@@ -244,14 +247,16 @@ export default function AdminLayout({ children }) {
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#e5a93b] flex items-center justify-center font-bold text-black">
-                    ZG
-                  </div>
+                  <img
+                    src={zeroGravityLogo}
+                    alt="Zero Gravity"
+                    className="w-9 h-9 rounded-xl object-cover ring-1 ring-zinc-700/80 shrink-0"
+                  />
                   <div>
-                    <span className="text-sm font-bold uppercase tracking-wider font-display text-white">
+                    <span className="text-sm font-bold text-white block tracking-wide">
                       Zero Gravity
                     </span>
-                    <span className="text-[10px] uppercase font-bold text-[#e5a93b] tracking-wider block">
+                    <span className="text-[10px] uppercase font-semibold text-[#e5a93b] tracking-wider block">
                       Admin Console
                     </span>
                   </div>
@@ -272,10 +277,10 @@ export default function AdminLayout({ children }) {
                       key={item.path}
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+                      className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-xs transition-colors ${
                         item.active
-                          ? "bg-[#e5a93b] text-black font-bold"
-                          : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                          ? "bg-[#e5a93b] text-zinc-950 font-semibold"
+                          : "text-zinc-400 hover:text-white hover:bg-zinc-800 font-medium"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -290,8 +295,14 @@ export default function AdminLayout({ children }) {
             </div>
 
             <div className="pt-4 border-t border-zinc-800 space-y-3">
-              <div className="text-xs text-zinc-400">
-                Logged in as <strong className="text-white">{user?.profile?.username || user?.email}</strong>
+              <div className="text-xs text-zinc-400 flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[#e5a93b] shrink-0">
+                  <User className="w-4 h-4" />
+                </div>
+                <div className="truncate">
+                  <span className="block text-white font-medium truncate">{user?.profile?.username || "Admin"}</span>
+                  <span className="block text-[11px] text-zinc-500 truncate">{user?.email}</span>
+                </div>
               </div>
               <button
                 type="button"
@@ -327,7 +338,7 @@ export default function AdminLayout({ children }) {
                   Admin
                 </Link>
                 <span>/</span>
-                <span className="text-white font-semibold capitalize">
+                <span className="text-white font-medium capitalize">
                   {getBreadcrumbTitle()}
                 </span>
               </div>
@@ -339,7 +350,7 @@ export default function AdminLayout({ children }) {
             {!isAddProductActive && (
               <Link
                 to="/admin/add-product"
-                className="py-2 px-3.5 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs flex items-center gap-1.5 hover:brightness-110 shadow-[0_0_15px_rgba(229,169,59,0.25)] transition-all cursor-pointer uppercase tracking-wider"
+                className="py-2 px-3.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 <span>Add Product</span>
@@ -361,17 +372,9 @@ export default function AdminLayout({ children }) {
               target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-[#e5a93b]" />
+              <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
               <span>Storefront</span>
             </Link>
-
-            <div className="h-6 w-[1px] bg-zinc-800 hidden sm:block" />
-
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#e5a93b]/10 border border-[#e5a93b]/30 flex items-center justify-center text-[#e5a93b] text-xs font-bold">
-                {user?.profile?.username?.slice(0, 2).toUpperCase() || "AD"}
-              </div>
-            </div>
           </div>
         </header>
 

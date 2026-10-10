@@ -227,7 +227,7 @@ export default function EditProductPage() {
             type="button"
             onClick={handleSubmit}
             disabled={saving}
-            className="px-5 py-2.5 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs transition-all hover:brightness-110 shadow-[0_0_20px_rgba(229,169,59,0.3)] flex items-center gap-2 disabled:opacity-50 cursor-pointer uppercase tracking-wider"
+            className="px-5 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {saving ? (
               <>
@@ -593,24 +593,6 @@ export default function EditProductPage() {
                 </div>
               )}
 
-              {/* External Image URL input */}
-              <div>
-                <label className="block text-[11px] font-medium text-zinc-500 mb-1.5">
-                  Or paste direct external image URL:
-                </label>
-                <input
-                  type="url"
-                  value={directImageUrl}
-                  onChange={(e) => {
-                    setDirectImageUrl(e.target.value);
-                    if (e.target.value && !selectedFile) {
-                      setPreviewUrl(e.target.value);
-                    }
-                  }}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-zinc-300 placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b]"
-                />
-              </div>
             </div>
 
             {/* Live Storefront Preview Card */}
@@ -712,7 +694,7 @@ export default function EditProductPage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-3 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs transition-all hover:brightness-110 shadow-[0_0_20px_rgba(229,169,59,0.3)] flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="px-6 py-3 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {saving ? (
                 <>

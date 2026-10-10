@@ -2,21 +2,19 @@ import React, { useState, useEffect } from "react";
 import {
   Plus,
   Search,
-  LogOut,
   Package,
   Layers,
   Sparkles,
   Tag,
   Trash2,
-  ExternalLink,
   RefreshCw,
   CheckCircle,
-  XCircle,
   AlertCircle,
-  Check,
   X,
-  Filter,
   Edit2,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import CustomSelect from "@/components/ui/CustomSelect";
@@ -26,9 +24,9 @@ import {
   fetchBrands,
   deleteProduct,
   toggleProductField,
-  adminLogout,
 } from "@/lib/supabase";
 import AddProductModal from "./AddProductModal";
+import ProductDetailsModal from "./ProductDetailsModal";
 
 export default function AdminDashboard({ user, onLogout }) {
   const [products, setProducts] = useState([]);
@@ -43,8 +41,13 @@ export default function AdminDashboard({ user, onLogout }) {
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Modal
+  // Pagination (20 by default)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
+  // Modals
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [viewingProduct, setViewingProduct] = useState(null);
 
   // Feedback notification
   const [feedback, setFeedback] = useState(null);
@@ -84,41 +87,71 @@ export default function AdminDashboard({ user, onLogout }) {
     loadData();
   }, []);
 
+  // Reset page when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedBrand, statusFilter]);
+
   const handleProductAdded = (newProduct) => {
     setProducts((prev) => [newProduct, ...prev]);
     showNotification(`Product "${newProduct.product_name}" added successfully!`);
   };
 
-  const handleDelete = async (productId, productName) => {
-    if (!window.confirm(`Are you sure you want to delete "${productName}"?`)) {
+  // Deactivate product (or reactivate) via Delete icon
+  const handleDeactivateToggle = async (product) => {
+    const isCurrentlyActive = product.isActive === 1;
+    const action = isCurrentlyActive ? "deactivate" : "reactivate";
+
+    if (
+      !window.confirm(
+        `Are you sure you want to ${action} "${product.product_name}"?`
+      )
+    ) {
       return;
     }
 
-    const { error } = await deleteProduct(productId);
-    if (error) {
-      showNotification(`Failed to delete product: ${error.message}`, "error");
-    } else {
-      setProducts((prev) => prev.filter((p) => p.product_id !== productId));
-      showNotification(`Deleted "${productName}".`);
-    }
-  };
+    const nextVal = isCurrentlyActive ? 0 : 1;
 
-  const handleToggle = async (productId, field, currentValue) => {
-    const nextVal = currentValue === 1 ? 0 : 1;
-    // Optimistic update
+    // Optimistic state update
     setProducts((prev) =>
-      prev.map((p) => (p.product_id === productId ? { ...p, [field]: nextVal } : p))
+      prev.map((p) =>
+        p.product_id === product.product_id ? { ...p, isActive: nextVal } : p
+      )
     );
 
-    const { error } = await toggleProductField(productId, field, nextVal);
+    if (viewingProduct?.product_id === product.product_id) {
+      setViewingProduct((prev) =>
+        prev ? { ...prev, isActive: nextVal } : null
+      );
+    }
+
+    const { error } = await toggleProductField(
+      product.product_id,
+      "isActive",
+      product.isActive
+    );
+
     if (error) {
       // Revert on error
       setProducts((prev) =>
-        prev.map((p) => (p.product_id === productId ? { ...p, [field]: currentValue } : p))
+        prev.map((p) =>
+          p.product_id === product.product_id
+            ? { ...p, isActive: product.isActive }
+            : p
+        )
       );
-      showNotification(`Failed to update ${field}: ${error.message}`, "error");
+      if (viewingProduct?.product_id === product.product_id) {
+        setViewingProduct((prev) =>
+          prev ? { ...prev, isActive: product.isActive } : null
+        );
+      }
+      showNotification(`Failed to ${action} product: ${error.message}`, "error");
     } else {
-      showNotification(`Updated ${field} status.`);
+      showNotification(
+        `"${product.product_name}" has been ${
+          isCurrentlyActive ? "deactivated" : "reactivated"
+        } successfully.`
+      );
     }
   };
 
@@ -155,20 +188,27 @@ export default function AdminDashboard({ user, onLogout }) {
   // Metrics
   const totalCount = products.length;
   const activeCount = products.filter((p) => p.isActive === 1).length;
-  const inStockCount = products.filter((p) => p.isAvailable === 1).length;
+  const inStockCount = products.filter((p) => (Number(p.product_qty) || 0) > 0).length;
   const featuredCount = products.filter((p) => p.isFeatured === 1).length;
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / pageSize) || 1;
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       {/* Page Header & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/80">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-wider uppercase flex items-center gap-3">
-            <Package className="w-7 h-7 text-[#e5a93b]" />
+          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+            <Package className="w-6 h-6 text-[#e5a93b]" />
             Products Inventory
           </h1>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-            Manage your catalog, stock levels, master category & brand associations, and visibility flags.
+            Manage your catalog, stock levels, master category & brand associations, and visibility.
           </p>
         </div>
 
@@ -176,16 +216,18 @@ export default function AdminDashboard({ user, onLogout }) {
           <button
             onClick={() => loadData(true)}
             disabled={refreshing}
-            className="px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center gap-2 text-xs font-semibold"
+            className="px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center gap-2 text-xs font-medium"
             title="Refresh inventory"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? "animate-spin text-[#e5a93b]" : ""}`} />
+            <RefreshCw
+              className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-[#e5a93b]" : ""}`}
+            />
             <span>Refresh</span>
           </button>
 
           <Link
             to="/admin/add-product"
-            className="py-2.5 px-4 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs flex items-center gap-2 hover:brightness-110 shadow-[0_0_20px_rgba(229,169,59,0.3)] transition-all cursor-pointer uppercase tracking-wider"
+            className="py-2.5 px-4 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs flex items-center gap-2 transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add New Product</span>
@@ -194,418 +236,448 @@ export default function AdminDashboard({ user, onLogout }) {
       </div>
 
       {/* Floating Notification */}
-        {feedback && (
-          <div
-            className={`p-4 rounded-xl text-xs flex items-center justify-between shadow-xl transition-all border ${
-              feedback.type === "error"
-                ? "bg-red-950/80 border-red-800 text-red-200"
-                : "bg-[#13151f] border-[#e5a93b]/50 text-zinc-200"
-            }`}
+      {feedback && (
+        <div
+          className={`p-4 rounded-xl text-xs flex items-center justify-between transition-all border ${
+            feedback.type === "error"
+              ? "bg-red-950/80 border-red-800 text-red-200"
+              : "bg-[#141722] border-zinc-700 text-zinc-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {feedback.type === "error" ? (
+              <AlertCircle className="w-4 h-4 text-red-400" />
+            ) : (
+              <CheckCircle className="w-4 h-4 text-[#e5a93b]" />
+            )}
+            <span>{feedback.msg}</span>
+          </div>
+          <button
+            onClick={() => setFeedback(null)}
+            className="text-zinc-500 hover:text-white ml-4"
           >
-            <div className="flex items-center gap-2">
-              {feedback.type === "error" ? (
-                <AlertCircle className="w-4 h-4 text-red-400" />
-              ) : (
-                <CheckCircle className="w-4 h-4 text-[#e5a93b]" />
-              )}
-              <span>{feedback.msg}</span>
-            </div>
-            <button
-              onClick={() => setFeedback(null)}
-              className="text-zinc-500 hover:text-white ml-4"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        )}
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">
-                Total Products
-              </span>
-              <Package className="w-4 h-4 text-[#e5a93b]" />
-            </div>
-            <div className="text-3xl font-extrabold text-white mt-2 font-display">
-              {totalCount}
-            </div>
-            <div className="text-[11px] text-zinc-500 mt-1">Products in database</div>
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
+              Total Products
+            </span>
+            <Package className="w-4 h-4 text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2 tracking-tight">
+            {totalCount}
+          </div>
+          <div className="text-[11px] text-zinc-500 mt-1">Products in database</div>
+        </div>
+
+        <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
+              Active Storefront
+            </span>
+            <CheckCircle className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2 tracking-tight">
+            {activeCount}
+          </div>
+          <div className="text-[11px] text-zinc-500 mt-1">Live in store catalog</div>
+        </div>
+
+        <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
+              In Stock & Available
+            </span>
+            <Tag className="w-4 h-4 text-zinc-400" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2 tracking-tight">
+            {inStockCount}
+          </div>
+          <div className="text-[11px] text-zinc-500 mt-1">Ready for purchase</div>
+        </div>
+
+        <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
+              Featured Gear
+            </span>
+            <Sparkles className="w-4 h-4 text-[#e5a93b]" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2 tracking-tight">
+            {featuredCount}
+          </div>
+          <div className="text-[11px] text-zinc-500 mt-1">Highlighted on homepage</div>
+        </div>
+      </div>
+
+      {/* Action & Filter Bar */}
+      <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        {/* Search & Selects */}
+        <div className="flex flex-wrap items-center gap-3 flex-1">
+          {/* Search Input */}
+          <div className="relative min-w-[200px] flex-1 sm:flex-initial">
+            <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 bg-[#090a0f] border border-zinc-800 rounded-xl text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] transition-colors"
+            />
           </div>
 
-          <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">
-                Active Storefront
-              </span>
-              <CheckCircle className="w-4 h-4 text-emerald-400" />
-            </div>
-            <div className="text-3xl font-extrabold text-emerald-400 mt-2 font-display">
-              {activeCount}
-            </div>
-            <div className="text-[11px] text-zinc-500 mt-1">Live in store catalog</div>
+          {/* Category Filter */}
+          <div className="min-w-[150px]">
+            <CustomSelect
+              size="sm"
+              value={selectedCategory}
+              onChange={(val) => setSelectedCategory(val)}
+              placeholder="All Categories"
+              options={[
+                { value: "all", label: "All Categories" },
+                ...categories.map((c) => ({
+                  value: c.category_id,
+                  label: c.category_name,
+                })),
+              ]}
+            />
           </div>
 
-          <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">
-                In Stock & Available
-              </span>
-              <Tag className="w-4 h-4 text-blue-400" />
-            </div>
-            <div className="text-3xl font-extrabold text-white mt-2 font-display">
-              {inStockCount}
-            </div>
-            <div className="text-[11px] text-zinc-500 mt-1">Available for order</div>
+          {/* Brand Filter */}
+          <div className="min-w-[140px]">
+            <CustomSelect
+              size="sm"
+              value={selectedBrand}
+              onChange={(val) => setSelectedBrand(val)}
+              placeholder="All Brands"
+              options={[
+                { value: "all", label: "All Brands" },
+                ...brands.map((b) => ({
+                  value: b.brand_id,
+                  label: b.brand_name,
+                })),
+              ]}
+            />
           </div>
 
-          <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-zinc-400 font-semibold">
-                Featured Gear
-              </span>
-              <Sparkles className="w-4 h-4 text-amber-400" />
-            </div>
-            <div className="text-3xl font-extrabold text-amber-400 mt-2 font-display">
-              {featuredCount}
-            </div>
-            <div className="text-[11px] text-zinc-500 mt-1">Highlighted on homepage</div>
+          {/* Status Filter */}
+          <div className="min-w-[140px]">
+            <CustomSelect
+              size="sm"
+              value={statusFilter}
+              onChange={(val) => setStatusFilter(val)}
+              placeholder="All Statuses"
+              options={[
+                { value: "all", label: "All Statuses" },
+                { value: "active", label: "Active Only" },
+                { value: "inactive", label: "Inactive Only" },
+                { value: "featured", label: "Featured Only" },
+                { value: "new", label: "New Arrivals Only" },
+              ]}
+            />
           </div>
         </div>
 
-        {/* Action & Filter Bar */}
-        <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-          {/* Search & Selects */}
-          <div className="flex flex-wrap items-center gap-3 flex-1">
-            {/* Search Input */}
-            <div className="relative min-w-[200px] flex-1 sm:flex-initial">
-              <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b]"
-              />
-            </div>
+        {/* Master & Add Product Buttons */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <Link
+            to="/admin/categories"
+            className="py-2 px-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white font-medium rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
+            title="Manage Categories"
+          >
+            <Layers className="w-3.5 h-3.5 text-zinc-400" />
+            <span>Categories</span>
+            <span className="px-1.5 py-0.5 bg-zinc-800 text-[10px] rounded text-zinc-400 font-semibold">
+              {categories.length}
+            </span>
+          </Link>
 
-            {/* Category Filter */}
-            <div className="min-w-[150px]">
-              <CustomSelect
-                size="sm"
-                value={selectedCategory}
-                onChange={(val) => setSelectedCategory(val)}
-                placeholder="All Categories"
-                options={[
-                  { value: "all", label: "All Categories" },
-                  ...categories.map((c) => ({
-                    value: c.category_id,
-                    label: c.category_name,
-                  })),
-                ]}
-              />
-            </div>
+          <Link
+            to="/admin/brands"
+            className="py-2 px-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white font-medium rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
+            title="Manage Brands"
+          >
+            <Tag className="w-3.5 h-3.5 text-zinc-400" />
+            <span>Brands</span>
+            <span className="px-1.5 py-0.5 bg-zinc-800 text-[10px] rounded text-zinc-400 font-semibold">
+              {brands.length}
+            </span>
+          </Link>
 
-            {/* Brand Filter */}
-            <div className="min-w-[140px]">
-              <CustomSelect
-                size="sm"
-                value={selectedBrand}
-                onChange={(val) => setSelectedBrand(val)}
-                placeholder="All Brands"
-                options={[
-                  { value: "all", label: "All Brands" },
-                  ...brands.map((b) => ({
-                    value: b.brand_id,
-                    label: b.brand_name,
-                  })),
-                ]}
-              />
-            </div>
-
-            {/* Status Filter */}
-            <div className="min-w-[140px]">
-              <CustomSelect
-                size="sm"
-                value={statusFilter}
-                onChange={(val) => setStatusFilter(val)}
-                placeholder="All Statuses"
-                options={[
-                  { value: "all", label: "All Statuses" },
-                  { value: "active", label: "Active Only" },
-                  { value: "inactive", label: "Inactive Only" },
-                  { value: "featured", label: "Featured Only" },
-                  { value: "new", label: "New Arrivals Only" },
-                ]}
-              />
-            </div>
-          </div>
-
-          {/* Master & Add Product Buttons */}
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <Link
-              to="/admin/categories"
-              className="py-2 px-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white font-medium rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all"
-              title="Manage Categories"
-            >
-              <Layers className="w-3.5 h-3.5 text-[#e5a93b]" />
-              <span>Categories</span>
-              <span className="px-1.5 py-0.5 bg-zinc-800 text-[10px] rounded text-zinc-400 font-bold">
-                {categories.length}
-              </span>
-            </Link>
-
-            <Link
-              to="/admin/brands"
-              className="py-2 px-3 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white font-medium rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all"
-              title="Manage Brands"
-            >
-              <Tag className="w-3.5 h-3.5 text-[#e5a93b]" />
-              <span>Brands</span>
-              <span className="px-1.5 py-0.5 bg-zinc-800 text-[10px] rounded text-zinc-400 font-bold">
-                {brands.length}
-              </span>
-            </Link>
-
-            <Link
-              to="/admin/add-product"
-              className="py-2.5 px-4 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] hover:brightness-110 text-black font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(229,169,59,0.25)] transition-all shrink-0 uppercase tracking-wider"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Product</span>
-            </Link>
-          </div>
+          <Link
+            to="/admin/add-product"
+            className="py-2 px-3.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors shrink-0"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add Product</span>
+          </Link>
         </div>
+      </div>
 
-        {/* Product Inventory Table */}
-        <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl overflow-hidden shadow-2xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="bg-[#151722] text-zinc-400 uppercase tracking-wider font-semibold border-b border-zinc-800">
-                  <th className="py-3.5 px-4">Item & Info</th>
-                  <th className="py-3.5 px-4">Category</th>
-                  <th className="py-3.5 px-4">Brand</th>
-                  <th className="py-3.5 px-4">Price</th>
-                  <th className="py-3.5 px-4">Qty</th>
-                  <th className="py-3.5 px-4">isAvailable</th>
-                  <th className="py-3.5 px-4">isNew</th>
-                  <th className="py-3.5 px-4">isFeatured</th>
-                  <th className="py-3.5 px-4">isActive</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
+      {/* Simplified, Professional Product Inventory Table */}
+      <div className="bg-[#12141c] border border-zinc-800/80 rounded-xl overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-[#151722] text-zinc-400 font-medium border-b border-zinc-800">
+                <th className="py-3.5 px-4 font-medium w-16">SL No</th>
+                <th className="py-3.5 px-4 font-medium">Product</th>
+                <th className="py-3.5 px-4 font-medium">Category</th>
+                <th className="py-3.5 px-4 font-medium">Price</th>
+                <th className="py-3.5 px-4 font-medium">Stock</th>
+                <th className="py-3.5 px-4 font-medium">Status</th>
+                <th className="py-3.5 px-4 font-medium text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800/60">
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-zinc-500">
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <RefreshCw className="w-5 h-5 animate-spin text-[#e5a93b]" />
+                      <span>Loading inventory...</span>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-800/60">
-                {loading ? (
-                  <tr>
-                    <td colSpan={10} className="py-16 text-center text-zinc-500">
-                      <div className="flex flex-col items-center justify-center gap-3">
-                        <RefreshCw className="w-6 h-6 animate-spin text-[#e5a93b]" />
-                        <span>Loading inventory from database...</span>
-                      </div>
-                    </td>
-                  </tr>
-                ) : filteredProducts.length === 0 ? (
-                  <tr>
-                    <td colSpan={10} className="py-16 text-center text-zinc-500">
-                      <div className="flex flex-col items-center justify-center gap-2">
-                        <Package className="w-8 h-8 text-zinc-700" />
-                        <span className="text-zinc-400 font-medium">No products found</span>
-                        <p className="text-xs text-zinc-600">
-                          Try clearing filters or click "Add New Product" to create one.
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProducts.map((p) => {
-                    const categoryName = p.category_master?.category_name || "Uncategorized";
-                    const brandName = p.brand_master?.brand_name || "Standard";
+              ) : paginatedProducts.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-zinc-500">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Package className="w-7 h-7 text-zinc-700" />
+                      <span className="text-zinc-400 font-medium">No products found</span>
+                      <p className="text-xs text-zinc-600">
+                        Try adjusting your search filters or click "Add New Product".
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                paginatedProducts.map((p, index) => {
+                  const serialNo = (currentPage - 1) * pageSize + index + 1;
+                  const categoryName =
+                    p.category_master?.category_name || "Uncategorized";
+                  const stockQty = Number(p.product_qty || 0);
 
-                    return (
-                      <tr key={p.product_id} className="hover:bg-zinc-800/30 transition-colors">
-                        {/* Image & Product Name */}
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden flex items-center justify-center shrink-0">
-                              {p.product_image ? (
-                                <img
-                                  src={p.product_image}
-                                  alt={p.product_name}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <Package className="w-5 h-5 text-zinc-600" />
-                              )}
-                            </div>
-                            <div className="max-w-[180px] sm:max-w-xs truncate">
-                              <p className="font-semibold text-white truncate hover:text-[#e5a93b] transition-colors">
-                                {p.product_name}
-                              </p>
-                              <span className="text-[10px] text-zinc-500">
-                                ID: #{p.product_id}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
+                  return (
+                    <tr
+                      key={p.product_id}
+                      className="hover:bg-zinc-800/40 transition-colors"
+                    >
+                      {/* SL No */}
+                      <td className="py-3 px-4 text-zinc-400 font-medium">
+                        {serialNo}
+                      </td>
 
-                        {/* Category */}
-                        <td className="py-3 px-4">
-                          <span className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 font-medium text-[11px]">
-                            {categoryName}
-                          </span>
-                        </td>
-
-                        {/* Brand */}
-                        <td className="py-3 px-4">
-                          <span className="text-zinc-300 font-medium">{brandName}</span>
-                        </td>
-
-                        {/* Price */}
-                        <td className="py-3 px-4">
-                          <span className="text-white font-bold text-sm">
-                            ₹{Number(p.product_price).toLocaleString("en-IN")}
-                          </span>
-                        </td>
-
-                        {/* Quantity */}
-                        <td className="py-3 px-4">
-                          <span
-                            className={`font-semibold ${
-                              p.product_qty < 5
-                                ? "text-red-400 bg-red-950/40 px-2 py-0.5 rounded"
-                                : "text-zinc-300"
-                            }`}
-                          >
-                            {p.product_qty} pcs
-                          </span>
-                        </td>
-
-                        {/* isAvailable Checkbox Toggle */}
-                        <td className="py-3 px-4">
+                      {/* Product: Thumbnail + Name + ID */}
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
                           <button
                             type="button"
-                            onClick={() => handleToggle(p.product_id, "isAvailable", p.isAvailable)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              p.isAvailable === 1
-                                ? "bg-emerald-950/40 border-emerald-800 text-emerald-300 hover:bg-emerald-900/50"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800"
-                            }`}
+                            onClick={() => setViewingProduct(p)}
+                            className="w-11 h-11 rounded-lg bg-[#090a0f] border border-zinc-800 overflow-hidden flex items-center justify-center shrink-0 hover:border-zinc-700 transition-colors cursor-pointer"
+                            title="View product details"
                           >
-                            {p.isAvailable === 1 ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-400" />
-                                <span>Yes</span>
-                              </>
+                            {p.product_image ? (
+                              <img
+                                src={p.product_image}
+                                alt={p.product_name}
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
-                              <>
-                                <X className="w-3 h-3 text-zinc-500" />
-                                <span>No</span>
-                              </>
+                              <Package className="w-4 h-4 text-zinc-600" />
                             )}
                           </button>
-                        </td>
-
-                        {/* isNew Checkbox Toggle */}
-                        <td className="py-3 px-4">
-                          <button
-                            type="button"
-                            onClick={() => handleToggle(p.product_id, "isNew", p.isNew)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              p.isNew === 1
-                                ? "bg-cyan-950/40 border-cyan-800 text-cyan-300 hover:bg-cyan-900/50"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800"
-                            }`}
-                          >
-                            {p.isNew === 1 ? (
-                              <>
-                                <Check className="w-3 h-3 text-cyan-400" />
-                                <span>New</span>
-                              </>
-                            ) : (
-                              <span>-</span>
-                            )}
-                          </button>
-                        </td>
-
-                        {/* isFeatured Checkbox Toggle */}
-                        <td className="py-3 px-4">
-                          <button
-                            type="button"
-                            onClick={() => handleToggle(p.product_id, "isFeatured", p.isFeatured)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              p.isFeatured === 1
-                                ? "bg-amber-950/40 border-amber-800 text-amber-300 hover:bg-amber-900/50"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800"
-                            }`}
-                          >
-                            {p.isFeatured === 1 ? (
-                              <>
-                                <Sparkles className="w-3 h-3 text-amber-400" />
-                                <span>Featured</span>
-                              </>
-                            ) : (
-                              <span>-</span>
-                            )}
-                          </button>
-                        </td>
-
-                        {/* isActive Checkbox Toggle */}
-                        <td className="py-3 px-4">
-                          <button
-                            type="button"
-                            onClick={() => handleToggle(p.product_id, "isActive", p.isActive)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              p.isActive === 1
-                                ? "bg-[#e5a93b]/20 border-[#e5a93b]/50 text-[#e5a93b] hover:bg-[#e5a93b]/30"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800"
-                            }`}
-                          >
-                            {p.isActive === 1 ? (
-                              <>
-                                <Check className="w-3 h-3" />
-                                <span>Active</span>
-                              </>
-                            ) : (
-                              <>
-                                <X className="w-3 h-3" />
-                                <span>Inactive</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-
-                        {/* Actions: Edit & Delete */}
-                        <td className="py-3 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <Link
-                              to={`/admin/edit-product/${p.product_id}`}
-                              className="p-1.5 rounded-lg text-zinc-400 hover:text-[#e5a93b] hover:bg-[#e5a93b]/10 transition-colors"
-                              title="Edit product"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </Link>
+                          <div className="max-w-[220px] sm:max-w-xs truncate">
                             <button
                               type="button"
-                              onClick={() => handleDelete(p.product_id, p.product_name)}
-                              className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-950/30 transition-colors cursor-pointer"
-                              title="Delete product"
+                              onClick={() => setViewingProduct(p)}
+                              className="font-medium text-white truncate hover:text-[#e5a93b] transition-colors text-left block w-full cursor-pointer"
+                              title={p.product_name}
                             >
-                              <Trash2 className="w-4 h-4" />
+                              {p.product_name}
                             </button>
+                            <span className="text-[11px] text-zinc-500 font-normal">
+                              ID: #{p.product_id}
+                            </span>
                           </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+                        </div>
+                      </td>
+
+                      {/* Category */}
+                      <td className="py-3 px-4">
+                        <span className="px-2.5 py-1 rounded-md bg-zinc-800/80 text-zinc-300 font-normal text-[11px] border border-zinc-700/50">
+                          {categoryName}
+                        </span>
+                      </td>
+
+                      {/* Price */}
+                      <td className="py-3 px-4">
+                        <span className="text-white font-semibold text-xs sm:text-sm">
+                          ₹{Number(p.product_price).toLocaleString("en-IN")}
+                        </span>
+                      </td>
+
+                      {/* Stock */}
+                      <td className="py-3 px-4">
+                        {stockQty <= 0 ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                            Out of stock
+                          </span>
+                        ) : stockQty <= 5 ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            {stockQty} left (Low)
+                          </span>
+                        ) : (
+                          <span className="text-zinc-300 font-medium text-xs">
+                            {stockQty} in stock
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Status */}
+                      <td className="py-3 px-4">
+                        {p.isActive === 1 ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                            Active
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-zinc-800 text-zinc-400 border border-zinc-700/60">
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+                            Inactive
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Actions: Eye, Edit, Delete (Deactivate) */}
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          {/* Eye Icon: View all details */}
+                          <button
+                            type="button"
+                            onClick={() => setViewingProduct(p)}
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+                            title="View product details"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+
+                          {/* Edit Icon */}
+                          <Link
+                            to={`/admin/edit-product/${p.product_id}`}
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-[#e5a93b] hover:bg-zinc-800 transition-colors cursor-pointer"
+                            title="Edit product"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Link>
+
+                          {/* Delete Icon: Deactivate product */}
+                          <button
+                            type="button"
+                            onClick={() => handleDeactivateToggle(p)}
+                            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                              p.isActive === 1
+                                ? "text-zinc-400 hover:text-rose-400 hover:bg-rose-950/20"
+                                : "text-emerald-400 hover:bg-emerald-950/20"
+                            }`}
+                            title={
+                              p.isActive === 1
+                                ? "Deactivate product"
+                                : "Reactivate product"
+                            }
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
 
-      {/* Add Product Modal */}
+        {/* Table Pagination Bar */}
+        {filteredProducts.length > 0 && (
+          <div className="px-4 py-3.5 bg-[#151722]/60 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div className="text-zinc-400">
+              Showing{" "}
+              <span className="font-semibold text-white">
+                {(currentPage - 1) * pageSize + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-semibold text-white">
+                {Math.min(currentPage * pageSize, filteredProducts.length)}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-white">
+                {filteredProducts.length}
+              </span>{" "}
+              products
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 mr-2">
+                <span className="text-zinc-400">Show:</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-2 py-1 bg-[#090a0f] border border-zinc-800 rounded-lg text-xs text-white focus:outline-none cursor-pointer"
+                >
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-1.5 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                title="Previous page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <span className="px-2 font-medium text-zinc-300">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="p-1.5 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                title="Next page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Product Details Modal (View full info on Eye click) */}
+      <ProductDetailsModal
+        isOpen={Boolean(viewingProduct)}
+        product={viewingProduct}
+        onClose={() => setViewingProduct(null)}
+        onToggleActive={handleDeactivateToggle}
+      />
+
+      {/* Add Product Modal fallback */}
       <AddProductModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

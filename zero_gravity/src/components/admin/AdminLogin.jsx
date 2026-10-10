@@ -38,11 +38,7 @@ export default function AdminLogin({ onLoginSuccess }) {
 
 
   return (
-    <div className="min-h-screen bg-[#08090c] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden selection:bg-[#e5a93b] selection:text-black">
-      {/* Background radial glow */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#e5a93b]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#e5a93b]/10 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="admin-theme min-h-screen bg-[#090a0f] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden text-zinc-100">
       {/* Back button */}
       <div className="w-full max-w-md mb-6">
         <Link
@@ -54,16 +50,16 @@ export default function AdminLogin({ onLoginSuccess }) {
         </Link>
       </div>
 
-      <div className="w-full max-w-md bg-[#12141c]/90 border border-zinc-800/80 rounded-2xl p-8 backdrop-blur-xl shadow-2xl relative">
+      <div className="w-full max-w-md bg-[#12141c] border border-zinc-800 rounded-2xl p-8 shadow-xl relative">
         {/* Top badge */}
         <div className="flex items-center justify-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#e5a93b]/20 to-[#e5a93b]/5 border border-[#e5a93b]/30 flex items-center justify-center shadow-[0_0_25px_rgba(229,169,59,0.2)]">
-            <ShieldCheck className="w-8 h-8 text-[#e5a93b]" />
+          <div className="w-14 h-14 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+            <ShieldCheck className="w-7 h-7 text-[#e5a93b]" />
           </div>
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white tracking-wider uppercase font-display">
+          <h1 className="text-2xl font-bold text-white tracking-tight">
             Admin Portal
           </h1>
           <p className="text-zinc-400 text-sm mt-1">
@@ -124,7 +120,7 @@ export default function AdminLogin({ onLoginSuccess }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] hover:brightness-110 active:scale-[0.99] text-black font-semibold rounded-xl text-sm transition-all shadow-[0_0_20px_rgba(229,169,59,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2 cursor-pointer"
+            className="w-full py-3 px-4 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2 cursor-pointer"
           >
             {loading ? (
               <>

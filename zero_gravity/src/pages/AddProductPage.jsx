@@ -213,10 +213,10 @@ export default function AddProductPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       {/* Page Title & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/80">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-wider uppercase flex items-center gap-3">
-            <Package className="w-7 h-7 text-[#e5a93b]" />
+          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+            <Package className="w-6 h-6 text-[#e5a93b]" />
             Add New Product
           </h1>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1">
@@ -235,7 +235,7 @@ export default function AddProductPage() {
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-5 py-2.5 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs transition-all hover:brightness-110 shadow-[0_0_20px_rgba(229,169,59,0.3)] flex items-center gap-2 disabled:opacity-50 cursor-pointer uppercase tracking-wider"
+            className="px-5 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {submitting ? (
               <>
@@ -601,25 +601,6 @@ export default function AddProductPage() {
                     </div>
                   </div>
                 )}
-
-                {/* External Image URL input */}
-                <div>
-                  <label className="block text-[11px] font-medium text-zinc-500 mb-1.5">
-                    Or paste direct external image URL:
-                  </label>
-                  <input
-                    type="url"
-                    value={directImageUrl}
-                    onChange={(e) => {
-                      setDirectImageUrl(e.target.value);
-                      if (e.target.value && !selectedFile) {
-                        setPreviewUrl(e.target.value);
-                      }
-                    }}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full px-3 py-2 bg-[#0a0b10] border border-zinc-800 rounded-xl text-xs text-zinc-300 placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b]"
-                  />
-                </div>
               </div>
 
               {/* Live Storefront Preview Card */}
@@ -721,7 +702,7 @@ export default function AddProductPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-3 bg-gradient-to-r from-[#e5a93b] to-[#f5af3f] text-black font-bold rounded-xl text-xs transition-all hover:brightness-110 shadow-[0_0_20px_rgba(229,169,59,0.3)] flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="px-6 py-3 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <>

@@ -73,7 +73,7 @@ export default function CustomSelect({
 
       {/* Styled Dropdown Menu */}
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-1.5 z-50 min-w-full bg-[#12141c] border border-zinc-800 rounded-xl shadow-2xl py-1.5 max-h-60 overflow-y-auto">
+        <div className="absolute left-0 right-0 top-full mt-1.5 z-50 min-w-full bg-[#12141c] border border-zinc-800 rounded-xl shadow-2xl py-1.5 max-h-60 overflow-y-auto [color-scheme:dark]">
           {options.length === 0 ? (
             <div className="px-4 py-3 text-xs text-zinc-500 text-center">
               No options available
