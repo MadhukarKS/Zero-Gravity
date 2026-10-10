@@ -75,12 +75,12 @@ const TESTIMONIALS = [
 
 function SectionLabel({ kicker, title, sub }) {
   return (
-    <div className="text-center mb-14">
-      <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-3">— {kicker} —</div>
-      <h2 className="font-display font-black text-4xl md:text-6xl text-foreground">
+    <div className="text-center mb-10 sm:mb-14 px-2">
+      <div className="text-yellow text-[11px] sm:text-xs tracking-[0.4em] sm:tracking-[0.5em] uppercase mb-2 sm:mb-3 font-semibold">— {kicker} —</div>
+      <h2 className="font-display font-black text-3xl sm:text-4xl md:text-6xl text-foreground tracking-tight">
         {title}
       </h2>
-      {sub && <p className="mt-4 text-foreground/60 max-w-2xl mx-auto font-body">{sub}</p>}
+      {sub && <p className="mt-3 sm:mt-4 text-foreground/60 max-w-2xl mx-auto font-body text-xs sm:text-sm md:text-base leading-relaxed">{sub}</p>}
     </div>
   );
 }
@@ -143,18 +143,18 @@ export default function Home() {
             <Link
               key={it.k}
               to="/#services"
-              className="group px-4 py-5 flex items-center gap-3 hover:bg-yellow/5 transition-colors duration-300"
+              className="group px-3 sm:px-4 py-3.5 sm:py-5 flex items-center gap-2.5 sm:gap-3 hover:bg-yellow/5 transition-colors duration-300"
             >
-              <span className="font-display font-black text-yellow/70 text-lg md:text-xl group-hover:text-yellow transition-colors duration-300">
+              <span className="font-display font-black text-yellow/70 text-base sm:text-lg md:text-xl group-hover:text-yellow transition-colors duration-300 shrink-0">
                 {it.k}
               </span>
               <div className="min-w-0">
-                <div className="font-display font-bold text-sm md:text-base truncate">{it.t}</div>
-                <div className="text-[10px] md:text-xs text-foreground/50 tracking-widest uppercase truncate font-body">
+                <div className="font-display font-bold text-xs sm:text-sm md:text-base truncate">{it.t}</div>
+                <div className="text-[9px] sm:text-[10px] md:text-xs text-foreground/50 tracking-wider sm:tracking-widest uppercase truncate font-body">
                   {it.s}
                 </div>
               </div>
-              <span className="ml-auto text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300">→</span>
+              <span className="ml-auto text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:inline">→</span>
             </Link>
           ))}
         </div>
@@ -186,37 +186,37 @@ export default function Home() {
       {/* ABOUT */}
       <motion.section
         id="about"
-        className="relative py-28 px-6 overflow-hidden"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <FloatingParts />
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center relative">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center relative">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-4">— Our Story —</div>
-            <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
+            <div className="text-yellow text-[11px] sm:text-xs tracking-[0.4em] sm:tracking-[0.5em] uppercase mb-3 font-semibold">— Our Story —</div>
+            <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
               Built for <span className="text-yellow">Riders</span>,<br />
               Not Just Bikes.
             </h2>
-            <p className="mt-6 text-foreground/75 leading-relaxed text-sm md:text-base font-body">
+            <p className="mt-4 sm:mt-6 text-foreground/75 leading-relaxed text-xs sm:text-sm md:text-base font-body">
               ZERO GRAVITY is where steel becomes sculpture and machines become extensions of the rider. Born in a garage, raised on adrenaline — we obsess over every bolt, weld and curve so your bike feels like nothing else on the road.
             </p>
-            <div className="mt-8 grid grid-cols-3 gap-6 max-w-md">
+            <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-3 sm:gap-6 max-w-md">
               {[
                 ["1200+", "Builds"],
                 ["10 yrs", "Wrenching"],
                 ["48+", "Awards"],
               ].map(([n, l]) => (
                 <div key={l}>
-                  <div className="font-display text-2xl md:text-3xl font-bold text-yellow">{n}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-foreground/50 mt-1">{l}</div>
+                  <div className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-yellow">{n}</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase tracking-wider sm:tracking-widest text-foreground/50 mt-1">{l}</div>
                 </div>
               ))}
             </div>
@@ -237,42 +237,42 @@ export default function Home() {
               height={900}
               className="relative w-full h-auto rounded-xl border border-border"
             />
-            <div className="absolute -bottom-4 -right-4 bg-yellow text-primary-foreground px-4 py-2.5 text-xs font-display font-black tracking-widest rounded-lg shadow-lg">
+            <div className="absolute bottom-3 right-3 sm:-bottom-4 sm:-right-4 bg-yellow text-primary-foreground px-3 py-1.5 sm:px-4 sm:py-2.5 text-[10px] sm:text-xs font-display font-black tracking-wider sm:tracking-widest rounded-lg shadow-lg">
               HIMALAYAN · ZG EDITION
             </div>
           </motion.div>
         </div>
 
         {/* FOUNDER MESSAGE CARD */}
-        <div className="max-w-5xl mx-auto mt-24 relative">
+        <div className="max-w-5xl mx-auto mt-14 sm:mt-24 relative">
           <motion.div
-            className="card-dark p-8 md:p-12 relative overflow-hidden"
+            className="card-dark p-6 sm:p-8 md:p-12 relative overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="absolute -top-10 -left-6 text-yellow/10 font-display font-black text-[160px] leading-none select-none pointer-events-none">"</div>
-            <div className="relative grid md:grid-cols-[auto_1fr] gap-8 items-start">
-              <div className="flex md:flex-col items-center md:items-start gap-4">
-                <div className="w-16 h-16 rounded-full bg-yellow/10 border border-yellow/30 flex items-center justify-center font-display font-black text-yellow text-xl shadow-inner">
+            <div className="absolute -top-8 -left-4 sm:-top-10 sm:-left-6 text-yellow/10 font-display font-black text-[90px] sm:text-[140px] md:text-[160px] leading-none select-none pointer-events-none">"</div>
+            <div className="relative grid md:grid-cols-[auto_1fr] gap-6 md:gap-8 items-start">
+              <div className="flex md:flex-col items-center md:items-start gap-3 sm:gap-4">
+                <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-yellow/10 border border-yellow/30 flex items-center justify-center font-display font-black text-yellow text-lg sm:text-xl shadow-inner shrink-0">
                   S
                 </div>
                 <div className="md:mt-2">
-                  <div className="text-[10px] tracking-[0.4em] uppercase text-yellow font-semibold">Founder</div>
-                  <div className="font-display text-lg font-black mt-0.5">Shreyas</div>
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-yellow font-semibold">Founder</div>
+                  <div className="font-display text-base sm:text-lg font-black mt-0.5">Shreyas</div>
                 </div>
               </div>
-              <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base font-body">
+              <div className="space-y-3.5 sm:space-y-4 text-foreground/80 leading-relaxed text-xs sm:text-sm md:text-base font-body">
                 <p>Hi, I'm <span className="text-yellow font-semibold">Shreyas</span>.</p>
                 <p>I was once an animator — but my passion was always somewhere else. In motorsports, in machines, and in the art of modification.</p>
                 <p>That passion kept growing stronger every day, until I made a decision to follow it completely. What started as an interest soon turned into something much bigger.</p>
                 <p>That's how <span className="text-yellow font-semibold">Zero Gravity</span> was born.</p>
                 <p>Today, Zero Gravity stands as a brand built on passion, precision, and trust — recognized across India and by enthusiasts around the world.</p>
                 <p className="text-foreground font-medium">This isn't just a business for me. It's what I love, every single day.</p>
-                <div className="pt-4 flex items-center gap-3">
-                  <div className="h-px w-10 bg-yellow/40" />
-                  <span className="font-display italic text-yellow tracking-[0.3em] text-xs">SHREYAS · FOUNDER</span>
+                <div className="pt-3 sm:pt-4 flex items-center gap-3">
+                  <div className="h-px w-8 sm:w-10 bg-yellow/40" />
+                  <span className="font-display italic text-yellow tracking-[0.25em] sm:tracking-[0.3em] text-[11px] sm:text-xs">SHREYAS · FOUNDER</span>
                 </div>
               </div>
             </div>
@@ -283,7 +283,7 @@ export default function Home() {
       {/* SERVICES */}
       <motion.section
         id="services"
-        className="relative py-28 px-6 bg-gradient-to-b from-background via-card/25 to-background"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-background via-card/25 to-background"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -295,11 +295,11 @@ export default function Home() {
             title="Engineered Obsession"
             sub="Four disciplines. One uncompromising standard."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {SERVICES.map((s, i) => (
               <motion.div
                 key={s.title}
-                className="card-dark p-8 group relative overflow-hidden"
+                className="card-dark p-6 sm:p-8 group relative overflow-hidden"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -308,12 +308,12 @@ export default function Home() {
                 <div className="absolute top-3 right-4 text-yellow/15 font-display text-4xl font-black">
                   0{i + 1}
                 </div>
-                <div className="text-yellow mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                <div className="text-yellow mb-5 sm:mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                   {s.icon}
                 </div>
-                <h3 className="font-display font-bold text-xl mb-2">{s.title}</h3>
-                <p className="text-foreground/60 text-sm leading-relaxed font-body">{s.desc}</p>
-                <div className="mt-6 text-yellow text-xs tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{s.title}</h3>
+                <p className="text-foreground/65 text-xs sm:text-sm leading-relaxed font-body">{s.desc}</p>
+                <div className="mt-5 sm:mt-6 text-yellow text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Learn More →
                 </div>
               </motion.div>
@@ -325,7 +325,7 @@ export default function Home() {
       {/* GALLERY */}
       <motion.section
         id="gallery"
-        className="relative py-28 px-6 overflow-hidden"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -338,7 +338,7 @@ export default function Home() {
             title="Indian Icons, Reimagined"
             sub="From the legendary RX100 to the modern R15 and Continental GT 650 — Indian machines re-engineered with ZG obsession."
           />
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {[
               { src: bikeRx100, tag: "Restomod · 01", name: "Yamaha RX100", spec: "2-Stroke Revival" },
               { src: bikeR15, tag: "Custom · 02", name: "Yamaha R15", spec: "Track-Spec Build" },
@@ -363,12 +363,12 @@ export default function Home() {
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
-                <div className="absolute inset-x-0 bottom-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="text-yellow text-xs tracking-[0.4em] uppercase font-semibold">{b.tag}</div>
-                  <h3 className="font-display text-2xl font-bold mt-1 text-white">{b.name}</h3>
-                  <div className="text-xs text-white/70 tracking-widest uppercase mt-1 font-body">{b.spec}</div>
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="text-yellow text-[11px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase font-semibold">{b.tag}</div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold mt-1 text-white">{b.name}</h3>
+                  <div className="text-[11px] sm:text-xs text-white/70 tracking-wider sm:tracking-widest uppercase mt-1 font-body">{b.spec}</div>
                 </div>
-                <div className="absolute top-4 right-4 w-10 h-10 rounded-full border border-yellow/30 bg-black/40 flex items-center justify-center text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-yellow/30 bg-black/50 flex items-center justify-center text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   ↗
                 </div>
               </motion.div>
@@ -380,7 +380,7 @@ export default function Home() {
       {/* ACCESSORIES TEASER */}
       <motion.section
         id="shop"
-        className="relative py-28 px-6 bg-card/20 border-y border-border"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-card/20 border-y border-border"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -393,14 +393,14 @@ export default function Home() {
             sub="Helmets · Jackets · Gloves · Boots · Exhausts · Eyewear — every riding gear you need, curated and ZG-approved."
           />
           {loadingProducts ? (
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
                   className="rounded-2xl bg-[#12141c]/60 border border-zinc-800/60 overflow-hidden animate-pulse flex flex-col"
                 >
                   <div className="aspect-square bg-zinc-800/40 w-full" />
-                  <div className="p-5 flex flex-col gap-3 flex-1">
+                  <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
                     <div className="h-4 w-3/4 bg-zinc-800/70 rounded" />
                     <div className="h-6 w-1/2 bg-zinc-800/70 rounded mt-4" />
                     <div className="grid grid-cols-2 gap-2 pt-2 mt-auto">
@@ -412,14 +412,14 @@ export default function Home() {
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="rounded-2xl bg-[#11131a] border border-zinc-800 p-8 md:p-12 text-center max-w-xl mx-auto">
-              <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mx-auto mb-4">
-                <PackageOpen className="w-7 h-7" />
+            <div className="rounded-2xl bg-[#11131a] border border-zinc-800 p-6 sm:p-8 md:p-12 text-center max-w-xl mx-auto">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mx-auto mb-4">
+                <PackageOpen className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
-              <h3 className="font-bold text-xl text-white mb-2">
+              <h3 className="font-bold text-lg sm:text-xl text-white mb-2">
                 Accessories Vault Updating Soon
               </h3>
-              <p className="text-zinc-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+              <p className="text-zinc-400 text-xs sm:text-sm max-w-md mx-auto mb-6 leading-relaxed">
                 Our upcoming collection of factory-spec gear, helmets, and performance components is currently being cataloged. Reach out to us directly for live stock availability.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -427,27 +427,27 @@ export default function Home() {
                   href="https://wa.me/917892318639?text=Hi%20Zero%20Gravity,%20I'd%20like%20to%20inquire%20about%20accessories%20and%20riding%20gear."
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-yellow text-xs cursor-pointer"
+                  className="btn-yellow text-xs cursor-pointer w-full sm:w-auto text-center justify-center"
                 >
                   Inquire on WhatsApp →
                 </a>
-                <Link to="/book-service" className="btn-ghost-yellow text-xs">
+                <Link to="/book-service" className="btn-ghost-yellow text-xs w-full sm:w-auto text-center justify-center">
                   Book Bike Service
                 </Link>
               </div>
             </div>
           ) : (
             <>
-              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {products.slice(0, 4).map((prod) => (
                   <ProductCard key={prod.product_id || prod.id} product={prod} />
                 ))}
               </div>
-              <div className="text-center mt-12">
-                <Link to="/accessories" className="btn-yellow">
+              <div className="text-center mt-10 sm:mt-12">
+                <Link to="/accessories" className="btn-yellow w-full sm:w-auto text-center justify-center">
                   Explore All Accessories ({products.length}) →
                 </Link>
-                <div className="text-[10px] tracking-[0.4em] uppercase text-foreground/40 mt-4 font-semibold">
+                <div className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-foreground/50 mt-3 sm:mt-4 font-semibold">
                   Live inventory from database · Add to cart · Order on WhatsApp
                 </div>
               </div>
@@ -458,7 +458,7 @@ export default function Home() {
 
       {/* TESTIMONIALS */}
       <motion.section
-        className="relative py-28 px-6 overflow-hidden"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -467,25 +467,25 @@ export default function Home() {
         <FloatingParts />
         <div className="max-w-7xl mx-auto relative">
           <SectionLabel kicker="The Riders" title="Voices From The Road" />
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {TESTIMONIALS.map((t, i) => (
               <motion.figure
                 key={t.name}
-                className="card-dark p-8 relative flex flex-col justify-between"
+                className="card-dark p-6 sm:p-8 relative flex flex-col justify-between"
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div>
-                  <div className="text-yellow font-display text-5xl leading-none mb-2 select-none">"</div>
-                  <blockquote className="text-foreground/75 italic leading-relaxed text-sm font-body">
+                  <div className="text-yellow font-display text-4xl sm:text-5xl leading-none mb-2 select-none">"</div>
+                  <blockquote className="text-foreground/80 italic leading-relaxed text-xs sm:text-sm font-body">
                     {t.text}
                   </blockquote>
                 </div>
-                <figcaption className="mt-6 pt-6 border-t border-border">
-                  <div className="font-display font-bold text-base">{t.name}</div>
-                  <div className="text-xs text-yellow tracking-widest uppercase mt-1 font-semibold">{t.bike}</div>
+                <figcaption className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-border">
+                  <div className="font-display font-bold text-sm sm:text-base">{t.name}</div>
+                  <div className="text-xs text-yellow tracking-wider sm:tracking-widest uppercase mt-1 font-semibold">{t.bike}</div>
                 </figcaption>
               </motion.figure>
             ))}
@@ -496,7 +496,7 @@ export default function Home() {
       {/* CONTACT */}
       <motion.section
         id="contact"
-        className="relative py-28 px-6 bg-gradient-to-b from-background to-black border-t border-border"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-background to-black border-t border-border"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -504,49 +504,49 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto">
           <SectionLabel kicker="Find Us" title="Roll Into The Garage" />
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="card-dark p-8 md:p-10 flex flex-col justify-between">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+            <div className="card-dark p-6 sm:p-8 md:p-10 flex flex-col justify-between">
               <div>
-                <h3 className="font-display text-2xl font-bold mb-6">Get In Touch</h3>
-                <div className="space-y-5">
+                <h3 className="font-display text-xl sm:text-2xl font-bold mb-5 sm:mb-6">Get In Touch</h3>
+                <div className="space-y-4 sm:space-y-5">
                   <a
                     href="tel:+917892318639"
-                    className="flex items-center gap-4 p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
+                    className="flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
                   >
-                    <div className="w-12 h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-lg">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg shrink-0">
                       📞
                     </div>
                     <div>
                       <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">Call</div>
-                      <div className="font-display text-lg font-bold">078923 18639</div>
+                      <div className="font-display text-base sm:text-lg font-bold">078923 18639</div>
                     </div>
                   </a>
                   <a
                     href="https://wa.me/917892318639"
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-4 p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
+                    className="flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
                   >
-                    <div className="w-12 h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-lg">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg shrink-0">
                       💬
                     </div>
                     <div>
                       <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">WhatsApp</div>
-                      <div className="font-display text-lg font-bold">Chat With The Crew</div>
+                      <div className="font-display text-base sm:text-lg font-bold">Chat With The Crew</div>
                     </div>
                   </a>
                   <a
                     href="https://www.google.com/maps?q=Pam+Arcade+Kulur+Ferry+Rd+Kottara+Mangaluru+Karnataka+575006"
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-start gap-4 p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
+                    className="flex items-start gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
                   >
-                    <div className="w-12 h-12 shrink-0 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-lg">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg">
                       📍
                     </div>
                     <div className="min-w-0 font-body">
                       <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">Garage</div>
-                      <div className="font-display text-sm md:text-base leading-snug font-bold text-foreground">
+                      <div className="font-display text-xs sm:text-sm md:text-base leading-snug font-bold text-foreground">
                         Pam Arcade, Kulur Ferry Rd,<br />Kottara, Mangaluru, Karnataka 575006
                       </div>
                     </div>
@@ -554,13 +554,13 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-10 flex gap-4">
-                <a href="tel:+917892318639" className="btn-yellow flex-1 justify-center">Call Now</a>
-                <a href="https://wa.me/917892318639" target="_blank" rel="noreferrer" className="btn-ghost-yellow flex-1 justify-center">WhatsApp</a>
+              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <a href="tel:+917892318639" className="btn-yellow flex-1 justify-center text-center">Call Now</a>
+                <a href="https://wa.me/917892318639" target="_blank" rel="noreferrer" className="btn-ghost-yellow flex-1 justify-center text-center">WhatsApp</a>
               </div>
             </div>
 
-            <div className="relative rounded-xl overflow-hidden border border-border min-h-[400px] shadow-lg">
+            <div className="relative rounded-xl overflow-hidden border border-border min-h-[280px] sm:min-h-[400px] shadow-lg">
               <iframe
                 title="ZG Garage Location"
                 src="https://www.google.com/maps?q=Pam+Arcade+Kulur+Ferry+Rd+Kottara+Mangaluru+Karnataka+575006&output=embed"

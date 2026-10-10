@@ -99,7 +99,7 @@ export default function HeroAnimation() {
       {!showLogo && (
         <button
           onClick={skipIntro}
-          className="absolute bottom-10 right-10 z-50 text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase bg-black/60 hover:bg-black/90 text-foreground/80 hover:text-yellow border border-white/10 hover:border-yellow/50 rounded-full px-5 py-2.5 transition duration-200 pointer-events-auto cursor-pointer shadow-lg backdrop-blur-md"
+          className="absolute bottom-6 right-4 sm:bottom-10 sm:right-10 z-50 text-[10px] sm:text-xs font-semibold tracking-[0.25em] sm:tracking-[0.3em] uppercase bg-black/75 hover:bg-black/90 text-foreground/90 hover:text-yellow border border-white/15 hover:border-yellow/50 rounded-full px-4 sm:px-5 py-2 sm:py-2.5 transition duration-200 pointer-events-auto cursor-pointer shadow-lg backdrop-blur-md"
         >
           Skip Intro
         </button>
@@ -222,14 +222,14 @@ export default function HeroAnimation() {
           <div className="h-px w-12 sm:w-20 bg-yellow/40" />
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Link to="/#gallery" className="btn-yellow">Explore Builds →</Link>
-          <Link to="/book-service" className="btn-ghost-yellow">Book Your Service</Link>
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none">
+          <Link to="/#gallery" className="btn-yellow w-full sm:w-auto text-center justify-center">Explore Builds →</Link>
+          <Link to="/book-service" className="btn-ghost-yellow w-full sm:w-auto text-center justify-center">Book Your Service</Link>
         </div>
       </div>
 
       {showLogo && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-yellow/60 text-[10px] tracking-[0.4em] uppercase animate-pulse z-20">
+        <div className="absolute bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 text-yellow/70 text-[9px] sm:text-[10px] tracking-[0.4em] uppercase animate-pulse z-20 pointer-events-none">
           Scroll ↓
         </div>
       )}

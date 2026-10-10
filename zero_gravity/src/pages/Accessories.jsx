@@ -198,20 +198,20 @@ export default function Accessories() {
       <Nav />
 
       {/* Header & Clean Filter Bar */}
-      <section className="relative pt-32 pb-12 px-6 border-b border-zinc-800 bg-[#0c0d12]">
+      <section className="relative pt-24 sm:pt-32 pb-8 sm:pb-12 px-4 sm:px-6 border-b border-zinc-800 bg-[#0c0d12]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-yellow text-xs tracking-widest uppercase mb-3 font-semibold">
+          <div className="text-yellow text-xs tracking-widest uppercase mb-2 sm:mb-3 font-semibold">
             — Store Inventory —
           </div>
-          <h1 className="font-display font-bold text-3xl sm:text-5xl md:text-6xl text-white tracking-tight">
+          <h1 className="font-display font-bold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight">
             The <span className="text-[#e5a93b]">Accessories</span> Vault
           </h1>
-          <p className="mt-3 text-zinc-400 max-w-2xl text-sm md:text-base leading-relaxed">
+          <p className="mt-2.5 sm:mt-3 text-zinc-400 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed">
             Browse our curated collection of factory-spec riding gear, track-tested helmets, exhausts, and performance accessories.
           </p>
 
           {/* Search Bar + Styled Category Dropdown + Styled Brand Dropdown */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 max-w-5xl">
+          <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 max-w-5xl">
             {/* Search Input */}
             <div className="lg:col-span-6 relative">
               <input
@@ -305,10 +305,10 @@ export default function Accessories() {
       </section>
 
       {/* Main Content Area */}
-      <section className="py-12 px-6 flex-1">
+      <section className="py-8 sm:py-12 px-4 sm:px-6 flex-1">
         <div className="max-w-7xl mx-auto">
           {/* Header count info */}
-          <div className="flex items-center justify-between mb-8 pb-4 border-b border-zinc-800">
+          <div className="flex items-center justify-between mb-6 sm:mb-8 pb-3 sm:pb-4 border-b border-zinc-800">
             <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
               {loading ? "Loading products…" : `${items.length} ${items.length === 1 ? "Product" : "Products"} Found`}
             </span>
@@ -322,7 +322,7 @@ export default function Accessories() {
 
           {/* Loading Skeleton */}
           {loading && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
@@ -346,7 +346,7 @@ export default function Accessories() {
 
           {/* Error State */}
           {!loading && error && (
-            <div className="rounded-xl bg-[#12141c] border border-zinc-800 p-10 text-center max-w-md mx-auto my-12">
+            <div className="rounded-xl bg-[#12141c] border border-zinc-800 p-8 sm:p-10 text-center max-w-md mx-auto my-8 sm:my-12">
               <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
               <h3 className="font-bold text-lg text-white mb-2">Error Loading Products</h3>
               <p className="text-zinc-400 text-sm mb-5">{error}</p>
@@ -362,14 +362,14 @@ export default function Accessories() {
 
           {/* Empty Database State (0 products total in DB) */}
           {!loading && !error && products.length === 0 && (
-            <div className="rounded-2xl bg-[#11131a] border border-zinc-800 p-12 text-center max-w-xl mx-auto my-12">
-              <div className="w-16 h-16 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mx-auto mb-5">
-                <PackageOpen className="w-8 h-8 text-zinc-400" />
+            <div className="rounded-2xl bg-[#11131a] border border-zinc-800 p-8 sm:p-12 text-center max-w-xl mx-auto my-8 sm:my-12">
+              <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mx-auto mb-5">
+                <PackageOpen className="w-7 sm:w-8 h-7 sm:h-8 text-zinc-400" />
               </div>
-              <h2 className="font-display font-bold text-2xl text-white mb-2">
+              <h2 className="font-display font-bold text-xl sm:text-2xl text-white mb-2">
                 The Vault is Currently Empty
               </h2>
-              <p className="text-zinc-400 text-sm leading-relaxed max-w-md mx-auto mb-6">
+              <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-md mx-auto mb-6">
                 No products have been added to the database yet. Check back soon for new arrivals or contact us directly on WhatsApp.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -377,14 +377,14 @@ export default function Accessories() {
                   href="https://wa.me/917892318639?text=Hi%20Zero%20Gravity,%20I'm%20looking%20for%20riding%20gear%20and%20accessories.%20Can%20you%20share%20current%20availability?"
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-yellow text-xs cursor-pointer"
+                  className="btn-yellow text-xs cursor-pointer w-full sm:w-auto justify-center"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Order via WhatsApp</span>
                 </a>
                 <Link
                   to="/book-service"
-                  className="btn-ghost-yellow text-xs"
+                  className="btn-ghost-yellow text-xs w-full sm:w-auto justify-center"
                 >
                   <Wrench className="w-4 h-4" />
                   <span>Book Custom Build</span>
@@ -395,7 +395,7 @@ export default function Accessories() {
 
           {/* Filter Empty State (Products exist in DB, but active search/filter returned 0) */}
           {!loading && !error && products.length > 0 && items.length === 0 && (
-            <div className="rounded-xl bg-[#12141c] border border-zinc-800 p-10 text-center max-w-md mx-auto my-12">
+            <div className="rounded-xl bg-[#12141c] border border-zinc-800 p-8 sm:p-10 text-center max-w-md mx-auto my-8 sm:my-12">
               <Search className="w-10 h-10 text-zinc-500 mx-auto mb-3" />
               <h3 className="font-bold text-lg text-white mb-2">No Matching Products</h3>
               <p className="text-zinc-400 text-sm mb-6">
@@ -413,7 +413,7 @@ export default function Accessories() {
 
           {/* Active Products Grid */}
           {!loading && !error && items.length > 0 && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {items.map((prod) => (
                 <ProductCard key={prod.product_id || prod.id} product={prod} />
               ))}

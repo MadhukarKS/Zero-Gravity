@@ -48,89 +48,89 @@ export default function BookService() {
       <Nav />
 
       {/* Header */}
-      <section className="relative pt-36 pb-16 px-6 border-b border-border overflow-hidden bg-grid">
+      <section className="relative pt-24 sm:pt-36 pb-10 sm:pb-16 px-4 sm:px-6 border-b border-border overflow-hidden bg-grid">
         <div className="absolute inset-0 bg-grid pointer-events-none z-0" />
         <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <div className="text-yellow text-xs tracking-[0.5em] uppercase mb-3 font-semibold">— Service Station —</div>
-          <h1 className="font-display font-black text-4xl md:text-6xl">
+          <div className="text-yellow text-xs tracking-[0.4em] uppercase mb-2 sm:mb-3 font-semibold">— Service Station —</div>
+          <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-white">
             Book Your <span className="text-yellow">Service</span>
           </h1>
-          <p className="mt-4 text-foreground/85 max-w-lg mx-auto text-sm md:text-base leading-relaxed font-body">
+          <p className="mt-3 sm:mt-4 text-foreground/85 max-w-lg mx-auto text-xs sm:text-sm md:text-base leading-relaxed font-body">
             Fill in the details below to schedule your custom build, upgrade, or service. Let's make your machine rise above.
           </p>
         </div>
       </section>
 
       {/* Form Section */}
-      <section className="py-16 px-6 flex-1 flex items-center justify-center">
+      <section className="py-8 sm:py-16 px-4 sm:px-6 flex-1 flex items-center justify-center">
         <div className="w-full max-w-2xl mx-auto relative">
           <div className="absolute -inset-4 bg-yellow/5 blur-3xl rounded-full pointer-events-none" />
           
           <motion.div 
-            className="card-dark p-8 md:p-10 relative overflow-hidden"
+            className="card-dark p-5 sm:p-8 md:p-10 relative overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             {!submitted ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                   {/* Name */}
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Name</label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Name</label>
                     <input
                       required
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Sagar Shetty"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                   {/* Phone */}
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Phone Number</label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Phone Number</label>
                     <input
                       required
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="e.g. 7892318639"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                   {/* Bike Brand */}
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Bike Brand</label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Bike Brand</label>
                     <input
                       required
                       type="text"
                       value={bikeBrand}
                       onChange={(e) => setBikeBrand(e.target.value)}
                       placeholder="e.g. Royal Enfield"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                   {/* Bike Model */}
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Bike Model</label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Bike Model</label>
                     <input
                       required
                       type="text"
                       value={bikeModel}
                       onChange={(e) => setBikeModel(e.target.value)}
                       placeholder="e.g. Himalayan 450"
-                      className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
+                      className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 font-body"
                     />
                   </div>
                 </div>
 
                 {/* Service Type */}
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Service Requirement</label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Service Requirement</label>
                   <CustomSelect
                     value={serviceType}
                     onChange={(val) => setServiceType(val)}
@@ -143,33 +143,33 @@ export default function BookService() {
                 </div>
 
                 {/* Date */}
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Preferred Appointment Date</label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Preferred Appointment Date</label>
                   <input
                     required
                     type="date"
                     min={today}
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer font-body"
+                    className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground transition-all duration-300 cursor-pointer font-body"
                   />
                 </div>
 
                 {/* Notes */}
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-foreground/60 font-semibold">Describe modifications or servicing requirements</label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label className="text-xs uppercase tracking-wider text-foreground/60 font-semibold">Describe modifications or servicing requirements</label>
                   <textarea
                     rows={4}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Describe custom paint, performance tuning, specific fairings or details you want modified..."
-                    className="w-full bg-background border border-border focus:border-yellow outline-none px-4 py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 resize-none font-body"
+                    className="w-full bg-background border border-border focus:border-yellow outline-none px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm text-foreground placeholder:text-muted-foreground/45 transition-all duration-300 resize-none font-body"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full btn-yellow justify-center py-3.5 text-sm cursor-pointer shadow-lg hover:shadow-yellow-sm"
+                  className="w-full btn-yellow justify-center py-3 sm:py-3.5 text-xs sm:text-sm cursor-pointer shadow-lg hover:shadow-yellow-sm"
                 >
                   Schedule Appointment
                 </button>
