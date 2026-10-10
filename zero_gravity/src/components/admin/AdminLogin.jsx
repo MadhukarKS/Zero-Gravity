@@ -38,82 +38,82 @@ export default function AdminLogin({ onLoginSuccess }) {
   };
 
   return (
-    <div className="admin-theme min-h-screen bg-[#090a0f] flex flex-col justify-center items-center px-4 py-8 relative text-zinc-100">
+    <div className="admin-theme min-h-screen bg-[#090a0f] flex flex-col justify-center items-center px-4 py-10 relative text-zinc-100">
       {/* Back button */}
-      <div className="w-full max-w-sm mb-4">
+      <div className="w-full max-w-md mb-4 px-1">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm text-zinc-400 hover:text-white transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-4 h-4" />
           <span>Back to Store</span>
         </Link>
       </div>
 
-      <div className="w-full max-w-sm bg-[#12141c] border border-zinc-800/90 rounded-2xl p-6 sm:p-8 shadow-xl">
+      <div className="w-full max-w-md bg-[#12141c] border border-zinc-800/90 rounded-2xl p-7 sm:p-9 shadow-2xl">
         {/* Brand Header */}
-        <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-14 h-14 rounded-2xl overflow-hidden border border-zinc-700/80 mb-3 shadow-md">
+        <div className="flex flex-col items-center text-center mb-7">
+          <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-zinc-700/80 mb-4 shadow-lg ring-1 ring-zinc-700/50">
             <img
               src={zeroGravityLogo}
               alt="Zero Gravity"
               className="w-full h-full object-cover"
             />
           </div>
-          <h1 className="text-xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Zero Gravity Admin
           </h1>
-          <p className="text-zinc-400 text-xs mt-1">
+          <p className="text-zinc-400 text-xs sm:text-sm mt-1.5">
             Sign in to access the management console
           </p>
         </div>
 
         {errorMsg && (
-          <div className="mb-5 p-3.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-start gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" />
+          <div className="mb-6 p-4 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs sm:text-sm flex items-start gap-3">
+            <span className="w-2 h-2 rounded-full bg-red-400 mt-1.5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs sm:text-sm font-medium text-zinc-300 mb-2">
               Username or Email
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="w-4.5 h-4.5 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="admin or admin@zerogravity.com"
                 required
-                className="w-full pl-10 pr-3.5 py-2.5 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] transition-colors text-xs"
+                className="w-full pl-11 pr-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] transition-colors text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs sm:text-sm font-medium text-zinc-300 mb-2">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4.5 h-4.5 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 required
-                className="w-full pl-10 pr-10 py-2.5 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] transition-colors text-xs"
+                className="w-full pl-11 pr-11 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] transition-colors text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
               </button>
             </div>
           </div>
@@ -121,11 +121,11 @@ export default function AdminLogin({ onLoginSuccess }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-semibold rounded-xl text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2 cursor-pointer shadow-sm"
+            className="w-full py-3 px-4 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-semibold rounded-xl text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-3 cursor-pointer shadow-md"
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4.5 h-4.5 animate-spin" />
                 <span>Authenticating...</span>
               </>
             ) : (
