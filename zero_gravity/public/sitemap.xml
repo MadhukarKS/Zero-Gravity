@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ZERO GRAVITY - XML SITEMAP
+  Scope: User-facing pages only (Admin routes are excluded for search privacy & security)
+  Domain: Replace https://zerogravity.com with your verified production domain if different.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ==========================================
+       1. HOME / LANDING PAGE
+       Keywords: Zero Gravity, Zero Gravity Mangaluru, superbike modification studio, custom bike builds, cafe racer, Himalayan 450 modification, Continental GT650, Yamaha RX100 custom, motorcycle performance tuning, Mangaluru garage
+       ========================================== -->
+  <url>
+    <loc>https://zerogravity.com/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://zerogravity.com/src/assets/zero_gravity.jpeg</image:loc>
+      <image:title>ZERO GRAVITY — The Bikers Destination Official Logo</image:title>
+      <image:caption>Zero Gravity Garage &amp; Superbike Studio in Mangaluru</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://zerogravity.com/src/assets/himalayan-yellow-DWL-TFZ-.jpg</image:loc>
+      <image:title>Custom Himalayan 450 Build — Zero Gravity</image:title>
+      <image:caption>Bespoke custom-engineered Himalayan 450 with performance tuning</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://zerogravity.com/src/assets/bike-gt650-B34hOGm7.jpg</image:loc>
+      <image:title>Continental GT 650 Custom Build</image:title>
+      <image:caption>Custom cafe racer modification with performance exhaust</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://zerogravity.com/src/assets/bike-rx100-D9KyAKJ6.jpg</image:loc>
+      <image:title>Yamaha RX 100 Vintage Restoration</image:title>
+      <image:caption>Factory-spec vintage restoration and 2-stroke tuning</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ==========================================
+       2. ACCESSORIES VAULT / STORE
+       Keywords: motorcycle accessories, riding gear India, motorcycle helmets, riding jackets, track gloves, performance exhausts, bike sliders, auxiliary fog lights, motorcycle parts Mangaluru
+       ========================================== -->
+  <url>
+    <loc>https://zerogravity.com/accessories</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://zerogravity.com/src/assets/zero_gravity.jpeg</image:loc>
+      <image:title>The Accessories Vault — ZERO GRAVITY Store</image:title>
+      <image:caption>Curated riding gear, helmets, and track-tested motorcycle accessories</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ==========================================
+       3. BOOK SERVICE / APPOINTMENT SCHEDULER
+       Keywords: book bike service, superbike service Mangaluru, custom bike modification booking, motorcycle dyno tuning, periodic bike maintenance, custom paint jobs, motorcycle detailing Mangaluru
+       ========================================== -->
+  <url>
+    <loc>https://zerogravity.com/book-service</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- ==========================================
+       4. SHOPPING CART / WHATSAPP CHECKOUT
+       Keywords: Zero Gravity shopping cart, order riding gear WhatsApp, buy motorcycle parts Mangaluru
+       ========================================== -->
+  <url>
+    <loc>https://zerogravity.com/cart</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,32 @@
+# ==========================================
+# ZERO GRAVITY - ROBOTS.TXT
+# Crawler Directives & Indexing Instructions
+# ==========================================
+
+User-agent: *
+
+# Allow crawling of all public user-facing pages and assets
+Allow: /
+Allow: /accessories
+Allow: /book-service
+Allow: /cart
+Allow: /src/assets/
+Allow: /assets/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.css$
+Allow: /*.js$
+
+# Disallow search engines from crawling or indexing admin control panel
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/*
+
+# Google Search Console Verification File
+Allow: /googlee12270ab9a7ce3d1.html
+
+# Sitemap location
+Sitemap: https://zerogravity.com/sitemap.xml

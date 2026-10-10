@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CustomSelect from "@/components/ui/CustomSelect";
 import { WHATSAPP_NUMBER } from "@/lib/cart";
+import { useSEO } from "@/lib/useSEO";
 
 const SERVICE_TYPES = [
   "Custom Bike Modification",
@@ -14,6 +15,12 @@ const SERVICE_TYPES = [
 ];
 
 export default function BookService() {
+  useSEO({
+    title: "Book Service Slot | Custom Modifications & Performance Tuning — ZERO GRAVITY",
+    description: "Schedule your custom bike modification, performance tuning, periodic servicing, or detailing appointment at Zero Gravity garage in Mangaluru.",
+    keywords: "book bike service, superbike service Mangaluru, custom bike modification booking, motorcycle dyno tuning, periodic bike maintenance, custom paint jobs, Zero Gravity service"
+  });
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [bikeBrand, setBikeBrand] = useState("");

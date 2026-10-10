@@ -13,6 +13,7 @@ import bikeGt650 from "@/assets/bike-gt650.jpg";
 import { motion } from "motion/react";
 import { PackageOpen } from "lucide-react";
 import { fetchPublicProducts } from "@/lib/supabase";
+import { useSEO } from "@/lib/useSEO";
 
 const SERVICES = [
   {
@@ -86,6 +87,12 @@ function SectionLabel({ kicker, title, sub }) {
 }
 
 export default function Home() {
+  useSEO({
+    title: "ZERO GRAVITY — The Bikers Destination | Custom Builds & Superbike Studio",
+    description: "Mangaluru's premier superbike modification studio, bespoke custom bike builder, performance tuning center, and motorcycle accessories store.",
+    keywords: "Zero Gravity, Zero Gravity Mangaluru, bike modification Mangaluru, superbike custom builds, Himalayan 450 modification, Continental GT650, Yamaha RX100 custom, motorcycle performance tuning, Mangaluru garage"
+  });
+
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
 

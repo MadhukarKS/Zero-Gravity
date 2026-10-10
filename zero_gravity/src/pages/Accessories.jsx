@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { fetchPublicProducts, fetchCategories, fetchBrands } from "@/lib/supabase";
+import { useSEO } from "@/lib/useSEO";
 import { Search, ChevronDown, Check, PackageOpen, RotateCcw, MessageCircle, Wrench, AlertCircle, Layers, Tag } from "lucide-react";
 
 function CustomDropdown({ value, onChange, options, placeholder = "Select...", icon: Icon }) {
@@ -77,6 +78,12 @@ function CustomDropdown({ value, onChange, options, placeholder = "Select...", i
 }
 
 export default function Accessories() {
+  useSEO({
+    title: "The Accessories Vault | Riding Gear, Helmets & Performance Parts — ZERO GRAVITY",
+    description: "Browse curated motorcycle gear, track-tested helmets, exhausts, and performance accessories at Zero Gravity. Order directly via WhatsApp.",
+    keywords: "motorcycle accessories, riding gear India, motorcycle helmets, riding jackets, track gloves, performance exhausts, bike sliders, auxiliary lights, Zero Gravity store"
+  });
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { buildWhatsAppOrderUrl, useCart } from "@/lib/cart";
+import { useSEO } from "@/lib/useSEO";
 
 function priceNumber(p) {
   const n = Number(p.replace(/[^\d.]/g, ""));
@@ -9,6 +10,12 @@ function priceNumber(p) {
 }
 
 export default function Cart() {
+  useSEO({
+    title: "Your Cart | Review Order & WhatsApp Checkout — ZERO GRAVITY",
+    description: "Review your selected motorcycle accessories and riding gear. Instant checkout and confirmation with the Zero Gravity crew on WhatsApp.",
+    keywords: "Zero Gravity cart, order motorcycle gear WhatsApp, buy bike accessories Mangaluru"
+  });
+
   const { items, setQty, remove, clear } = useCart();
   const subtotal = items.reduce((s, i) => s + priceNumber(i.price) * i.qty, 0);
   const fmt = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
