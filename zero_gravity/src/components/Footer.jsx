@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   MessageCircle,
   Instagram,
+  Facebook,
   Youtube,
   Wrench,
   ShieldCheck,
@@ -53,13 +54,22 @@ export default function Footer() {
                 <MessageCircle className="w-4 h-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/zerogravity_bikersdestination/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
                 className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-[#e5a93b] text-zinc-400 hover:text-[#e5a93b] hover:bg-zinc-800/80 flex items-center justify-center transition-all cursor-pointer"
               >
                 <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.facebook.com/p/Zero-Gravity-100064220043758/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Facebook"
+                className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-[#e5a93b] text-zinc-400 hover:text-[#e5a93b] hover:bg-zinc-800/80 flex items-center justify-center transition-all cursor-pointer"
+              >
+                <Facebook className="w-4 h-4" />
               </a>
               <a
                 href="https://youtube.com"

@@ -11,7 +11,7 @@ import bikeRx100 from "@/assets/bike-rx100.jpg";
 import bikeR15 from "@/assets/bike-r15.jpg";
 import bikeGt650 from "@/assets/bike-gt650.jpg";
 import { motion } from "motion/react";
-import { PackageOpen, Phone, MessageCircle, MapPin, Clock, ArrowUpRight, Star } from "lucide-react";
+import { PackageOpen, Phone, MessageCircle, MapPin, Clock, ArrowUpRight, Star, Instagram, Facebook } from "lucide-react";
 import { fetchPublicProducts } from "@/lib/supabase";
 import { useSEO } from "@/lib/useSEO";
 
@@ -172,8 +172,9 @@ export default function Home() {
       {/* HERO — full viewport */}
       <section className="relative h-[100svh] w-full overflow-hidden bg-grid">
         {/* Vertical side rail — left */}
-        <div className="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 flex-col gap-6 text-[10px] tracking-[0.5em] uppercase text-foreground/50">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="rotate-180 [writing-mode:vertical-rl] hover:text-yellow transition">Instagram</a>
+        <div className="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 flex-col gap-5 text-[10px] tracking-[0.5em] uppercase text-foreground/50">
+          <a href="https://www.instagram.com/zerogravity_bikersdestination/" target="_blank" rel="noreferrer" className="rotate-180 [writing-mode:vertical-rl] hover:text-yellow transition">Instagram</a>
+          <a href="https://www.facebook.com/p/Zero-Gravity-100064220043758/" target="_blank" rel="noreferrer" className="rotate-180 [writing-mode:vertical-rl] hover:text-yellow transition">Facebook</a>
           <a href="https://youtube.com" target="_blank" rel="noreferrer" className="rotate-180 [writing-mode:vertical-rl] hover:text-yellow transition">YouTube</a>
           <a href="https://wa.me/917892318639" target="_blank" rel="noreferrer" className="rotate-180 [writing-mode:vertical-rl] hover:text-yellow transition">WhatsApp</a>
         </div>
@@ -308,17 +309,19 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="absolute -top-8 -left-4 sm:-top-10 sm:-left-6 text-yellow/10 font-display font-black text-[90px] sm:text-[140px] md:text-[160px] leading-none select-none pointer-events-none">"</div>
-            <div className="relative grid md:grid-cols-[auto_1fr] gap-6 md:gap-8 items-start">
-              <div className="flex md:flex-col items-center md:items-start gap-3 sm:gap-4">
-                <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-yellow/10 border border-yellow/30 flex items-center justify-center font-display font-black text-yellow text-lg sm:text-xl shadow-inner shrink-0">
+            <div className="relative grid md:grid-cols-[auto_1fr] gap-6 md:gap-10 items-start">
+              {/* Founder Profile — Original Clean Left Column */}
+              <div className="flex md:flex-col items-center md:items-start gap-3 sm:gap-4 shrink-0">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow/10 border border-yellow/30 flex items-center justify-center font-display font-black text-yellow text-lg sm:text-xl shadow-inner shrink-0">
                   S
                 </div>
-                <div className="md:mt-2">
+                <div className="md:mt-1">
                   <div className="text-[10px] tracking-[0.3em] uppercase text-yellow font-semibold">Founder</div>
                   <div className="font-display text-base sm:text-lg font-black mt-0.5">Shreyas</div>
                 </div>
               </div>
+
+              {/* Founder Story */}
               <div className="space-y-3.5 sm:space-y-4 text-foreground/80 leading-relaxed text-xs sm:text-sm md:text-base font-body">
                 <p>Hi, I'm <span className="text-yellow font-semibold">Shreyas</span>.</p>
                 <p>I was once an animator — but my passion was always somewhere else. In motorsports, in machines, and in the art of modification.</p>
@@ -326,9 +329,38 @@ export default function Home() {
                 <p>That's how <span className="text-yellow font-semibold">Zero Gravity</span> was born.</p>
                 <p>Today, Zero Gravity stands as a brand built on passion, precision, and trust — recognized across India and by enthusiasts around the world.</p>
                 <p className="text-foreground font-medium">This isn't just a business for me. It's what I love, every single day.</p>
-                <div className="pt-3 sm:pt-4 flex items-center gap-3">
-                  <div className="h-px w-8 sm:w-10 bg-yellow/40" />
-                  <span className="font-display italic text-yellow tracking-[0.25em] sm:tracking-[0.3em] text-[11px] sm:text-xs">SHREYAS · FOUNDER</span>
+
+                {/* Bottom Signature & Social Channel Links */}
+                <div className="pt-4 sm:pt-6 border-t border-zinc-800/60 mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="h-px w-8 sm:w-10 bg-yellow/40" />
+                    <span className="font-display italic text-yellow tracking-[0.25em] sm:tracking-[0.3em] text-[11px] sm:text-xs">
+                      SHREYAS · FOUNDER
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <a
+                      href="https://www.instagram.com/zerogravity_bikersdestination/"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Instagram"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-yellow text-zinc-300 hover:text-yellow text-xs font-mono transition-colors"
+                    >
+                      <Instagram className="w-3.5 h-3.5" />
+                      <span>Instagram</span>
+                    </a>
+                    <a
+                      href="https://www.facebook.com/p/Zero-Gravity-100064220043758/"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Facebook"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-yellow text-zinc-300 hover:text-yellow text-xs font-mono transition-colors"
+                    >
+                      <Facebook className="w-3.5 h-3.5" />
+                      <span>Facebook</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
