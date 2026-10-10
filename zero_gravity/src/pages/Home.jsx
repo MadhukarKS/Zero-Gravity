@@ -11,7 +11,7 @@ import bikeRx100 from "@/assets/bike-rx100.jpg";
 import bikeR15 from "@/assets/bike-r15.jpg";
 import bikeGt650 from "@/assets/bike-gt650.jpg";
 import { motion } from "motion/react";
-import { PackageOpen } from "lucide-react";
+import { PackageOpen, Phone, MessageCircle, MapPin, Clock, ArrowUpRight, Star } from "lucide-react";
 import { fetchPublicProducts } from "@/lib/supabase";
 import { useSEO } from "@/lib/useSEO";
 
@@ -58,19 +58,68 @@ const SERVICES = [
 
 const TESTIMONIALS = [
   {
-    name: "Arjun M.",
+    name: "Arjun Menon",
     bike: "Kawasaki Ninja ZX-10R",
-    text: "They didn't modify my bike — they re-engineered my obsession. Every weld, every wire, premium.",
+    service: "Custom Fairing & ECU Map",
+    text: "Brought my ZX-10R in for full track fairings and ECU remapping. Shreyas and the Zero Gravity crew dialed it in to perfection. The mid-range throttle punch is ferocious, and the finish looks straight out of a WSBK paddock.",
+    rating: 5,
+    tag: "Verified Build",
   },
   {
-    name: "Rhea K.",
-    bike: "Ducati Monster",
-    text: "Walked in with a Monster. Walked out with a weapon. The detail is unreal.",
+    name: "Karthik Rao",
+    bike: "Continental GT 650",
+    service: "Cafe Racer Conversion",
+    text: "Turned my stock GT 650 into a true cafe racer masterpiece. Custom clip-ons, hand-stitched leather cowl, and a custom exhaust note that turns heads across Mangalore. Pure metal artistry.",
+    rating: 5,
+    tag: "Custom Build",
   },
   {
-    name: "Vikrant S.",
+    name: "Naveen D'Souza",
+    bike: "Yamaha RX 100",
+    service: "Vintage Restoration",
+    text: "My dad's 1996 RX 100 was sitting idle for 8 years. Zero Gravity brought it back to showroom glory. Crisp 2-stroke exhaust resonance, flawless gloss paint, and factory-spec rebuild. Pure nostalgia restored.",
+    rating: 5,
+    tag: "Restoration",
+  },
+  {
+    name: "Vikrant Shetty",
     bike: "BMW S1000RR",
-    text: "Track-day ready in two weeks. The bike feels lighter, sharper, faster. Worth every rupee.",
+    service: "Track Day Prep",
+    text: "Installed race-spec titanium headers, carbon winglets, and track sliders before my BIC track weekend. Rock solid fitment and zero vibrations at 260+ km/h. Wouldn't trust any other garage with my liter bike.",
+    rating: 5,
+    tag: "Performance",
+  },
+  {
+    name: "Aditya Hegde",
+    bike: "RE Himalayan 450",
+    service: "Expedition Touring Package",
+    text: "Prepped my Himalayan 450 for a Spiti Valley run. Heavy-duty crash protection, custom fog light mounts, and tailored touring ergonomics. 4,000 km of brutal terrain and not a single rattle. Uncompromising engineering.",
+    rating: 5,
+    tag: "Adventure",
+  },
+  {
+    name: "Rhea Kunder",
+    bike: "Ducati Monster 821",
+    service: "Desmo Care & Tail Tidy",
+    text: "Hard to find workshops in coastal Karnataka that you can genuinely trust with an Italian twin. The craftsmanship, electrical wiring tuck, and personalized passion from the Zero Gravity team is unmatched.",
+    rating: 5,
+    tag: "Verified Rider",
+  },
+  {
+    name: "Praneeth Kumar",
+    bike: "KTM 390 Duke",
+    service: "Quickshifter & Tuning",
+    text: "Quick turnaround for high-ratio sprocket setup, BMC air filter, and dyno check. The bike pulls like a rocket out of corners. Best place in town for riders who take performance seriously.",
+    rating: 5,
+    tag: "Tuning",
+  },
+  {
+    name: "Darshan Gowda",
+    bike: "Triumph Street Triple RS",
+    service: "Track-Grade Protection",
+    text: "Ordered a race-spec helmet, armored riding jacket, and custom engine sliders through their WhatsApp catalog. Instant dispatch and 100% genuine track-grade equipment. My permanent motorcycle gear vault.",
+    rating: 5,
+    tag: "Gear Vault",
   },
 ];
 
@@ -463,118 +512,252 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS - INFINITE MARQUEE */}
       <motion.section
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 overflow-hidden"
+        className="relative py-12 sm:py-16 overflow-hidden border-t border-zinc-800/80 bg-background"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
         <FloatingParts />
-        <div className="max-w-7xl mx-auto relative">
-          <SectionLabel kicker="The Riders" title="Voices From The Road" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.figure
-                key={t.name}
-                className="card-dark p-6 sm:p-8 relative flex flex-col justify-between"
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div>
-                  <div className="text-yellow font-display text-4xl sm:text-5xl leading-none mb-2 select-none">"</div>
-                  <blockquote className="text-foreground/80 italic leading-relaxed text-xs sm:text-sm font-body">
-                    {t.text}
-                  </blockquote>
-                </div>
-                <figcaption className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-border">
-                  <div className="font-display font-bold text-sm sm:text-base">{t.name}</div>
-                  <div className="text-xs text-yellow tracking-wider sm:tracking-widest uppercase mt-1 font-semibold">{t.bike}</div>
-                </figcaption>
-              </motion.figure>
-            ))}
+        <div className="relative">
+          <SectionLabel
+            kicker="Rider Intel"
+            title={
+              <>
+                Tested By The <span className="text-[#e5a93b]">Obsessed</span>
+              </>
+            }
+            sub="From canyon-carving liter bikes to vintage two-stroke restorations — unfiltered feedback from riders who push our machines to the edge."
+          />
+
+          {/* Infinite Marquee Reel (Left-to-Right Scrolling) */}
+          <div className="relative w-full overflow-hidden mt-6">
+            {/* Left & Right Subtle Fade Gradients */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r from-background via-background/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 bg-gradient-to-l from-background via-background/80 to-transparent z-10" />
+
+            {/* Scrolling Track */}
+            <div className="flex gap-4 sm:gap-6 animate-marquee-scroll w-max py-2">
+              {[...TESTIMONIALS, ...TESTIMONIALS].map((t, idx) => (
+                <figure
+                  key={`${t.name}-${idx}`}
+                  className="w-[310px] sm:w-[380px] shrink-0 card-dark p-5 sm:p-6 rounded-2xl flex flex-col justify-between border border-zinc-800 hover:border-[#e5a93b]/70 transition-colors select-none bg-[#10121a]"
+                >
+                  <div>
+                    {/* Header: Star Rating + Tag */}
+                    <div className="flex items-center justify-between mb-3.5">
+                      <div className="flex items-center gap-1 text-[#e5a93b]">
+                        {[...Array(t.rating || 5)].map((_, si) => (
+                          <Star key={si} className="w-3.5 h-3.5 fill-[#e5a93b]" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] tracking-wider uppercase font-semibold text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+                        {t.tag}
+                      </span>
+                    </div>
+
+                    {/* Review Quote */}
+                    <blockquote className="text-zinc-300 leading-relaxed text-xs sm:text-sm font-body">
+                      &ldquo;{t.text}&rdquo;
+                    </blockquote>
+                  </div>
+
+                  {/* Rider Info & Service */}
+                  <figcaption className="mt-5 pt-4 border-t border-zinc-800/80 flex items-center justify-between">
+                    <div>
+                      <div className="font-display font-bold text-sm text-white">{t.name}</div>
+                      <div className="text-[11px] text-[#e5a93b] font-medium tracking-wide mt-0.5">
+                        {t.bike}
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-medium text-right">
+                      {t.service}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
         </div>
       </motion.section>
 
       {/* CONTACT */}
+      {/* CONTACT & WORKSHOP LOCATION */}
       <motion.section
         id="contact"
-        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-background to-black border-t border-border"
+        className="relative py-16 sm:py-24 lg:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#0a0b0e] to-[#050608] border-t border-zinc-800"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="max-w-7xl mx-auto">
-          <SectionLabel kicker="Find Us" title="Roll Into The Garage" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-            <div className="card-dark p-6 sm:p-8 md:p-10 flex flex-col justify-between">
+          <SectionLabel
+            kicker="Base Coordinates"
+            title={
+              <>
+                Where Machines <span className="text-[#e5a93b]">Defy Gravity</span>
+              </>
+            }
+            sub="Our doors are open at Kottara, Mangaluru. From radical bespoke builds to precision track tuning — experience where the obsession takes shape."
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+            {/* Left Card: Contact Details (5 cols) */}
+            <div className="lg:col-span-5 card-dark p-6 sm:p-8 flex flex-col justify-between border border-zinc-800 rounded-2xl bg-[#0f1118]">
               <div>
-                <h3 className="font-display text-xl sm:text-2xl font-bold mb-5 sm:mb-6">Get In Touch</h3>
-                <div className="space-y-4 sm:space-y-5">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-zinc-800/80">
+                  <div>
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-[#e5a93b] font-bold block">
+                      Direct Channel
+                    </span>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-white mt-0.5">
+                      Get In Touch
+                    </h3>
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/50 text-[11px] font-semibold text-emerald-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Crew Online</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3.5">
+                  {/* Phone */}
                   <a
                     href="tel:+917892318639"
-                    className="flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
+                    className="flex items-center gap-3.5 p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800 hover:border-[#e5a93b]/60 hover:bg-zinc-800/60 transition-all duration-300 group"
                   >
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg shrink-0">
-                      📞
+                    <div className="w-11 h-11 rounded-xl bg-[#e5a93b]/10 text-[#e5a93b] border border-[#e5a93b]/30 flex items-center justify-center group-hover:bg-[#e5a93b] group-hover:text-black transition-all duration-300 shrink-0">
+                      <Phone className="w-5 h-5" />
                     </div>
-                    <div>
-                      <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">Call</div>
-                      <div className="font-display text-base sm:text-lg font-bold">078923 18639</div>
-                    </div>
-                  </a>
-                  <a
-                    href="https://wa.me/917892318639"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
-                  >
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg shrink-0">
-                      💬
-                    </div>
-                    <div>
-                      <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">WhatsApp</div>
-                      <div className="font-display text-base sm:text-lg font-bold">Chat With The Crew</div>
-                    </div>
-                  </a>
-                  <a
-                    href="https://www.google.com/maps?q=Pam+Arcade+Kulur+Ferry+Rd+Kottara+Mangaluru+Karnataka+575006"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-start gap-3.5 sm:gap-4 p-3.5 sm:p-4 border border-border rounded-lg hover:border-yellow/50 hover:bg-yellow/5 transition-all duration-300 group"
-                  >
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full bg-yellow/10 text-yellow flex items-center justify-center group-hover:bg-yellow group-hover:text-primary-foreground transition-all duration-300 text-base sm:text-lg">
-                      📍
-                    </div>
-                    <div className="min-w-0 font-body">
-                      <div className="text-[10px] tracking-widest uppercase text-foreground/50 font-semibold">Garage</div>
-                      <div className="font-display text-xs sm:text-sm md:text-base leading-snug font-bold text-foreground">
-                        Pam Arcade, Kulur Ferry Rd,<br />Kottara, Mangaluru, Karnataka 575006
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] tracking-wider uppercase text-zinc-500 font-semibold">
+                        Call Us Directly
+                      </div>
+                      <div className="font-display text-base font-bold text-white group-hover:text-[#e5a93b] transition-colors">
+                        078923 18639
                       </div>
                     </div>
+                    <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e5a93b] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </a>
+
+                  {/* WhatsApp */}
+                  <a
+                    href="https://wa.me/917892318639?text=Hi%20Zero%20Gravity,%20I'd%20like%20to%20discuss%20a%20bike%20build%20and%20service."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3.5 p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800 hover:border-[#e5a93b]/60 hover:bg-zinc-800/60 transition-all duration-300 group"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-black transition-all duration-300 shrink-0">
+                      <MessageCircle className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] tracking-wider uppercase text-zinc-500 font-semibold">
+                        Instant WhatsApp Chat
+                      </div>
+                      <div className="font-display text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                        Chat With The Crew
+                      </div>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </a>
+
+                  {/* Workshop Address */}
+                  <a
+                    href="https://maps.app.goo.gl/JkBbpEcJwfmT5D3P8"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-start gap-3.5 p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800 hover:border-[#e5a93b]/60 hover:bg-zinc-800/60 transition-all duration-300 group"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-[#e5a93b]/10 text-[#e5a93b] border border-[#e5a93b]/30 flex items-center justify-center group-hover:bg-[#e5a93b] group-hover:text-black transition-all duration-300 shrink-0 mt-0.5">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] tracking-wider uppercase text-zinc-500 font-semibold">
+                        Workshop Address
+                      </div>
+                      <div className="font-body text-xs sm:text-sm font-semibold text-white leading-snug mt-0.5">
+                        Pam Arcade, Kulur Ferry Rd, Kottara, Mangaluru, KA 575006
+                      </div>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-[#e5a93b] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </a>
+
+                  {/* Hours */}
+                  <div className="flex items-start gap-3.5 p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80">
+                    <div className="w-11 h-11 rounded-xl bg-zinc-800 text-zinc-400 flex items-center justify-center shrink-0">
+                      <Clock className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0 flex-1 text-xs">
+                      <div className="text-[10px] tracking-wider uppercase text-zinc-500 font-semibold">
+                        Operating Hours
+                      </div>
+                      <div className="font-medium text-zinc-200 mt-0.5">
+                        Mon – Sat: 9:30 AM – 8:30 PM
+                      </div>
+                      <div className="text-zinc-500 text-[11px]">
+                        Sunday: By Appointment
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <a href="tel:+917892318639" className="btn-yellow flex-1 justify-center text-center">Call Now</a>
-                <a href="https://wa.me/917892318639" target="_blank" rel="noreferrer" className="btn-ghost-yellow flex-1 justify-center text-center">WhatsApp</a>
+              {/* Action Buttons */}
+              <div className="mt-6 pt-5 border-t border-zinc-800/80 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="tel:+917892318639"
+                  className="btn-yellow flex-1 justify-center text-center text-xs py-3"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call Garage</span>
+                </a>
+                <a
+                  href="https://wa.me/917892318639?text=Hi%20Zero%20Gravity,%20I'd%20like%20to%20discuss%20a%20bike%20build%20and%20service."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-ghost-yellow flex-1 justify-center text-center text-xs py-3"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>WhatsApp</span>
+                </a>
               </div>
             </div>
 
-            <div className="relative rounded-xl overflow-hidden border border-border min-h-[280px] sm:min-h-[400px] shadow-lg">
-              <iframe
-                title="ZG Garage Location"
-                src="https://www.google.com/maps?q=Pam+Arcade+Kulur+Ferry+Rd+Kottara+Mangaluru+Karnataka+575006&output=embed"
-                className="absolute inset-0 w-full h-full border-0"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 pointer-events-none bg-yellow/5 mix-blend-overlay" />
+            {/* Right Card: Google Map (7 cols) */}
+            <div className="lg:col-span-7 flex flex-col rounded-2xl overflow-hidden border border-zinc-800 bg-[#0c0d12] shadow-2xl relative">
+              {/* Map Top Bar with Directions CTA */}
+              <div className="px-4 sm:px-6 py-3.5 bg-[#12141c] border-b border-zinc-800 flex items-center justify-between gap-3 z-10">
+                <div className="flex items-center gap-2.5 truncate">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#e5a93b] shrink-0" />
+                  <span className="font-display font-bold text-xs sm:text-sm text-white tracking-wide truncate">
+                    Zero Gravity · Kottara, Mangaluru
+                  </span>
+                </div>
+                <a
+                  href="https://maps.app.goo.gl/JkBbpEcJwfmT5D3P8"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#e5a93b] hover:bg-[#f5af3f] text-black font-semibold text-xs tracking-wider uppercase transition-colors shrink-0 shadow-sm"
+                >
+                  <span>Open Maps</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              {/* Map Iframe */}
+              <div className="relative flex-1 min-h-[380px] sm:min-h-[460px] w-full">
+                <iframe
+                  title="Zero Gravity Workshop Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.3174205021297!2d74.83376297593673!3d12.907239287401918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35bed93571781%3A0xd330e185c5395c88!2sZero%20Gravity!5e0!3m2!1sen!2sin!4v1718000000000!5m2!1sen!2sin"
+                  className="absolute inset-0 w-full h-full border-0"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </div>
           </div>
         </div>
