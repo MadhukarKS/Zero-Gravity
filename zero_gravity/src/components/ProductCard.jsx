@@ -59,7 +59,7 @@ export default function ProductCard({ product }) {
   });
 
   return (
-    <article className="group flex flex-col rounded-xl bg-[#12141c] border border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden">
+    <article className="group flex flex-col rounded-2xl bg-[#12141c] border border-zinc-800/90 hover:border-yellow/40 transition-all duration-300 hover:shadow-[0_0_25px_rgba(229,169,59,0.12)] overflow-hidden">
       {/* Top Image & Badges Container */}
       <div className="relative aspect-square w-full overflow-hidden bg-[#090a0f] select-none">
         {product.product_image && !imgError ? (
@@ -68,7 +68,7 @@ export default function ProductCard({ product }) {
             alt={product.product_name || "Product"}
             loading="lazy"
             onError={() => setImgError(true)}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           />
         ) : (
           /* Normal clean fallback placeholder */
@@ -85,29 +85,27 @@ export default function ProductCard({ product }) {
 
         {/* Top-Left Category Badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-black/80 text-zinc-200 border border-zinc-700/60">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-black/75 backdrop-blur-md text-zinc-200 border border-zinc-700/60 shadow-sm">
             {categoryName}
           </span>
         </div>
 
-        {/* Top-Right Status Badges */}
-        <div className="absolute top-3 right-3 z-10 flex flex-col gap-1 items-end">
-          {isNew && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-black">
-              New
-            </span>
-          )}
-          {isFeatured && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-zinc-800 text-zinc-200 border border-zinc-700">
-              Featured
-            </span>
-          )}
-          {!inStock && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-red-950 text-red-300 border border-red-800/60">
+        {/* Top-Right Status Badge — Single clean prioritized badge */}
+        <div className="absolute top-3 right-3 z-10">
+          {!inStock ? (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-red-950/90 backdrop-blur-md text-red-300 border border-red-800/60 shadow-sm">
               <PackageX className="w-3 h-3" />
               Out of Stock
             </span>
-          )}
+          ) : isNew ? (
+            <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-[#e5a93b] text-black shadow-md">
+              New
+            </span>
+          ) : isFeatured ? (
+            <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-black/75 backdrop-blur-md text-zinc-200 border border-zinc-700 shadow-sm">
+              Featured
+            </span>
+          ) : null}
         </div>
       </div>
 

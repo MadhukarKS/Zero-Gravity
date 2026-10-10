@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import HeroAnimation from "@/components/HeroAnimation";
 import FloatingParts from "@/components/FloatingParts";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -11,48 +11,54 @@ import bikeRx100 from "@/assets/bike-rx100.jpg";
 import bikeR15 from "@/assets/bike-r15.jpg";
 import bikeGt650 from "@/assets/bike-gt650.jpg";
 import { motion } from "motion/react";
-import { PackageOpen, Phone, MessageCircle, MapPin, Clock, ArrowUpRight, Star, Instagram, Facebook } from "lucide-react";
+import { PackageOpen, Phone, MessageCircle, MapPin, Clock, ArrowUpRight, Star, Instagram, Facebook, SlidersHorizontal, Flame, Gauge, Wrench } from "lucide-react";
 import { fetchPublicProducts } from "@/lib/supabase";
 import { useSEO } from "@/lib/useSEO";
 
 const SERVICES = [
   {
     title: "Bike Modification",
-    desc: "Bespoke aesthetic & ergonomic transformations tuned to your riding style.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-        <circle cx="6" cy="17" r="4" /><circle cx="18" cy="17" r="4" />
-        <path d="M6 17l4-9h6l2 5" /><path d="M10 8h4" />
-      </svg>
-    ),
+    tag: "Bespoke Craft",
+    desc: "Aesthetic overhauls, custom ergonomics, fairings, and cockpit tailoring tuned to your exact riding posture.",
+    icon: SlidersHorizontal,
+    highlights: [
+      "Custom bodywork & fairings",
+      "Clip-ons & rearsets setup",
+      "Handcrafted seat tailoring",
+    ],
   },
   {
     title: "Custom Builds",
-    desc: "Ground-up cafe racers, trackers and streetfighters engineered to obsess over.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-        <path d="M3 12h4l2-3h6l3 4h3v4h-5" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
-      </svg>
-    ),
+    tag: "One-Off Builds",
+    desc: "Ground-up cafe racers, scramblers, and streetfighters engineered with precision from raw chassis to asphalt.",
+    icon: Flame,
+    highlights: [
+      "Chassis & subframe fabrication",
+      "Custom fuel tanks & sheet metal",
+      "Complete ground-up teardown",
+    ],
   },
   {
     title: "Performance Upgrades",
-    desc: "ECU remaps, exhaust systems, suspension and brake upgrades. Numbers that matter.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-    ),
+    tag: "Dyno Proven",
+    desc: "Bespoke ECU remapping, performance exhausts, suspension tuning, and high-bite braking systems that deliver real numbers.",
+    icon: Gauge,
+    highlights: [
+      "Stage 1 & 2 ECU remapping",
+      "Full exhaust & intake systems",
+      "Suspension & brake overhauls",
+    ],
   },
   {
     title: "Servicing",
-    desc: "Factory-grade service, diagnostics and fluid systems. Precision, every cycle.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-        <path d="M14.7 6.3a4 4 0 00-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 005.4-5.4l-2.3 2.3-2.1-2.1z" />
-      </svg>
-    ),
+    tag: "Factory Grade",
+    desc: "Meticulous multi-point diagnostics, fluid flushes, throttle balance, and preventative maintenance for street & track.",
+    icon: Wrench,
+    highlights: [
+      "Electronic OBD diagnostics",
+      "Throttle body synchronization",
+      "Track prep & fluid flushes",
+    ],
   },
 ];
 
@@ -144,6 +150,25 @@ export default function Home() {
 
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const categories = useMemo(() => {
+    const set = new Set();
+    products.forEach((p) => {
+      const cat = p.category_master?.category_name || p.category_name || p.cat;
+      if (cat) set.add(cat);
+    });
+    return ["All", ...Array.from(set).slice(0, 5)];
+  }, [products]);
+
+  const displayedProducts = useMemo(() => {
+    if (selectedCategory === "All") return products.slice(0, 4);
+    const filtered = products.filter((p) => {
+      const cat = p.category_master?.category_name || p.category_name || p.cat;
+      return cat?.toLowerCase() === selectedCategory.toLowerCase();
+    });
+    return filtered.length > 0 ? filtered.slice(0, 4) : products.slice(0, 4);
+  }, [products, selectedCategory]);
 
   useEffect(() => {
     let mounted = true;
@@ -384,28 +409,65 @@ export default function Home() {
             sub="Four disciplines. One uncompromising standard."
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {SERVICES.map((s, i) => (
-              <motion.div
-                key={s.title}
-                className="card-dark p-6 sm:p-8 group relative overflow-hidden"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="absolute top-3 right-4 text-yellow/15 font-display text-4xl font-black">
-                  0{i + 1}
-                </div>
-                <div className="text-yellow mb-5 sm:mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  {s.icon}
-                </div>
-                <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{s.title}</h3>
-                <p className="text-foreground/65 text-xs sm:text-sm leading-relaxed font-body">{s.desc}</p>
-                <div className="mt-5 sm:mt-6 text-yellow text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Learn More →
-                </div>
-              </motion.div>
-            ))}
+            {SERVICES.map((s, i) => {
+              const IconComponent = s.icon;
+              return (
+                <motion.div
+                  key={s.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="h-full"
+                >
+                  <Link
+                    to={`/book-service?service=${encodeURIComponent(s.title)}`}
+                    className="card-dark p-6 sm:p-7 group relative overflow-hidden flex flex-col justify-between h-full rounded-2xl border border-zinc-800/90 hover:border-yellow/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(229,169,59,0.12)] block"
+                  >
+                    <div>
+                      {/* Top Bar: Icon + Clean Index */}
+                      <div className="flex items-center justify-between gap-3 mb-4">
+                        <div className="w-11 h-11 rounded-xl bg-yellow/10 border border-yellow/20 flex items-center justify-center text-yellow group-hover:scale-105 group-hover:bg-yellow/15 group-hover:border-yellow/40 transition-all duration-300 shadow-inner shrink-0">
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <span className="text-xs font-bold tracking-widest text-zinc-500 group-hover:text-yellow transition-colors uppercase">
+                          DISCIPLINE 0{i + 1}
+                        </span>
+                      </div>
+
+                      {/* Title & Category Badge */}
+                      <h3 className="font-display font-bold text-lg sm:text-xl text-foreground group-hover:text-yellow transition-colors mb-1.5">
+                        {s.title}
+                      </h3>
+                      <span className="inline-block text-[11px] font-medium text-yellow/90 bg-yellow/10 border border-yellow/20 px-2.5 py-0.5 rounded-full mb-3">
+                        {s.tag}
+                      </span>
+
+                      {/* Description */}
+                      <p className="text-foreground/75 text-xs sm:text-sm leading-relaxed mb-4 font-body">
+                        {s.desc}
+                      </p>
+
+                      {/* Capabilities Highlights — fills card space with valuable content */}
+                      <ul className="space-y-1.5 pt-3 border-t border-zinc-800/70 text-xs text-foreground/70 font-body">
+                        {s.highlights.map((h) => (
+                          <li key={h} className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-yellow/60 shrink-0" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Bottom Action Row */}
+                    <div className="mt-5 pt-3.5 border-t border-zinc-800/80 flex items-center justify-between text-xs font-semibold text-yellow/90 group-hover:text-yellow transition-colors font-body">
+                      <span>Book Discipline</span>
+                      <ArrowUpRight className="w-4 h-4 text-zinc-500 group-hover:text-yellow group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </motion.section>
@@ -426,38 +488,96 @@ export default function Home() {
             title="Indian Icons, Reimagined"
             sub="From the legendary RX100 to the modern R15 and Continental GT 650 — Indian machines re-engineered with ZG obsession."
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
-              { src: bikeRx100, tag: "Restomod · 01", name: "Yamaha RX100", spec: "2-Stroke Revival" },
-              { src: bikeR15, tag: "Custom · 02", name: "Yamaha R15", spec: "Track-Spec Build" },
-              { src: bikeGt650, tag: "Cafe Racer · 03", name: "Continental GT 650", spec: "Bobber Reborn" },
+              {
+                src: bikeRx100,
+                tag: "Restomod · 01",
+                name: "Yamaha RX100",
+                spec: "2-Stroke Revival",
+                mods: ["Chamber Exhaust", "Ported Cylinder", "Custom Cafe Cowl", "Spoke Wheels"],
+                inquireText: "Hi Zero Gravity, I saw your Yamaha RX100 Restomod build on the website and want to discuss building a similar 2-stroke machine!",
+              },
+              {
+                src: bikeR15,
+                tag: "Custom · 02",
+                name: "Yamaha R15",
+                spec: "Track-Spec Build",
+                mods: ["Track Fairing Kit", "Race ECU Calibration", "Free-Flow Exhaust", "Clip-On Bars"],
+                inquireText: "Hi Zero Gravity, I saw your Yamaha R15 Track-Spec build on the website and want to discuss a custom track modification!",
+              },
+              {
+                src: bikeGt650,
+                tag: "Cafe Racer · 03",
+                name: "Continental GT 650",
+                spec: "Bobber Reborn",
+                mods: ["Chopped Subframe", "Bobber Saddle", "Megaphone Exhaust", "Bar-End Mirrors"],
+                inquireText: "Hi Zero Gravity, I saw your Continental GT 650 Bobber build on the website and want to consult on a custom 650 build!",
+              },
             ].map((b, i) => (
               <motion.div
                 key={b.name}
-                className="relative group overflow-hidden rounded-xl border border-border shadow-md"
+                className="group relative flex flex-col rounded-2xl bg-[#0f1118] border border-zinc-800/90 hover:border-yellow/40 transition-all duration-300 hover:shadow-[0_0_30px_rgba(229,169,59,0.12)] overflow-hidden"
                 initial={{ opacity: 0, scale: 0.96, y: 25 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="overflow-hidden aspect-square">
+                {/* Photo with Overlay */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-black select-none">
                   <img
                     src={b.src}
                     alt={b.name}
                     loading="lazy"
                     width={1024}
-                    height={1024}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    height={768}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f1118] via-transparent to-transparent opacity-90" />
+
+                  {/* Top Tag Badge */}
+                  <div className="absolute top-3.5 left-3.5 z-10">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-black/75 backdrop-blur-md text-yellow border border-yellow/20 shadow-sm">
+                      {b.tag}
+                    </span>
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
-                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="text-yellow text-[11px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase font-semibold">{b.tag}</div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold mt-1 text-white">{b.name}</h3>
-                  <div className="text-[11px] sm:text-xs text-white/70 tracking-wider sm:tracking-widest uppercase mt-1 font-body">{b.spec}</div>
-                </div>
-                <div className="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-yellow/30 bg-black/50 flex items-center justify-center text-yellow opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  ↗
+
+                {/* Details Body */}
+                <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-yellow transition-colors">
+                      {b.name}
+                    </h3>
+                    <div className="text-xs text-zinc-400 uppercase tracking-wider font-body mt-0.5 mb-3.5 font-medium">
+                      {b.spec}
+                    </div>
+
+                    {/* Modification Specs Pills */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {b.mods.map((mod) => (
+                        <span
+                          key={mod}
+                          className="text-[11px] font-body bg-zinc-900/90 text-zinc-300 border border-zinc-800/80 px-2.5 py-1 rounded-md"
+                        >
+                          {mod}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* WhatsApp Action Button */}
+                  <div className="pt-3 border-t border-zinc-800/80">
+                    <a
+                      href={`https://wa.me/917892318639?text=${encodeURIComponent(b.inquireText)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-2.5 px-3 rounded-xl bg-zinc-900 hover:bg-yellow border border-zinc-800 hover:border-yellow text-zinc-200 hover:text-black font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer font-body shadow-sm"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>Inquire This Build</span>
+                    </a>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -480,6 +600,27 @@ export default function Home() {
             title="Premium Accessories"
             sub="Helmets · Jackets · Gloves · Boots · Exhausts · Eyewear — every riding gear you need, curated and ZG-approved."
           />
+
+          {/* Interactive Category Filter Pills */}
+          {!loadingProducts && products.length > 0 && categories.length > 1 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-8 sm:mb-10">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setSelectedCategory(c)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer font-body ${
+                    selectedCategory === c
+                      ? "bg-yellow text-primary-foreground font-semibold shadow-[0_0_15px_rgba(229,169,59,0.25)]"
+                      : "bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          )}
+
           {loadingProducts ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {[...Array(4)].map((_, i) => (
@@ -527,7 +668,7 @@ export default function Home() {
           ) : (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                {products.slice(0, 4).map((prod) => (
+                {displayedProducts.map((prod) => (
                   <ProductCard key={prod.product_id || prod.id} product={prod} />
                 ))}
               </div>
@@ -535,7 +676,7 @@ export default function Home() {
                 <Link to="/accessories" className="btn-yellow w-full sm:w-auto text-center justify-center">
                   Explore All Accessories ({products.length}) →
                 </Link>
-                <div className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-foreground/50 mt-3 sm:mt-4 font-semibold">
+                <div className="text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-foreground/50 mt-3 sm:mt-4 font-semibold font-body">
                   Live inventory from database · Add to cart · Order on WhatsApp
                 </div>
               </div>
