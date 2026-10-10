@@ -43,7 +43,7 @@ export default function AdminDashboard({ user, onLogout }) {
 
   // Pagination (20 by default)
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const pageSize = 20;
 
   // Modals
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -749,24 +749,7 @@ export default function AdminDashboard({ user, onLogout }) {
               products
             </div>
 
-            <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
-              <div className="flex items-center gap-1.5 mr-1 sm:mr-2">
-                <span className="text-zinc-400 text-[11px]">Show:</span>
-                <select
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className="px-2 py-1 bg-[#090a0f] border border-zinc-800 rounded-lg text-xs text-white focus:outline-none cursor-pointer"
-                >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </select>
-              </div>
-
+            <div className="flex items-center justify-center gap-1.5 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
