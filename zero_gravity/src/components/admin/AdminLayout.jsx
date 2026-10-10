@@ -379,9 +379,57 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* Dynamic Nested Page Content */}
-        <main className="flex-1 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden pb-20 md:pb-8">
           {children || <Outlet context={{ user }} />}
         </main>
+
+        {/* Mobile Bottom Navigation Bar for Thumb-Friendly Access */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#0d0f17]/95 backdrop-blur-lg border-t border-zinc-800/80 px-2 py-1.5 flex items-center justify-around">
+          <Link
+            to="/admin"
+            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-colors ${
+              isInventoryActive ? "text-[#e5a93b] font-medium" : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            <span className="text-[10px]">Inventory</span>
+          </Link>
+          <Link
+            to="/admin/add-product"
+            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-colors ${
+              isAddProductActive ? "text-[#e5a93b] font-medium" : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span className="text-[10px]">Add Product</span>
+          </Link>
+          <Link
+            to="/admin/categories"
+            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-colors ${
+              isCategoriesActive ? "text-[#e5a93b] font-medium" : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span className="text-[10px]">Categories</span>
+          </Link>
+          <Link
+            to="/admin/brands"
+            className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-colors ${
+              isBrandsActive ? "text-[#e5a93b] font-medium" : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <Tag className="w-4 h-4" />
+            <span className="text-[10px]">Brands</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-zinc-400 hover:text-white transition-colors cursor-pointer"
+          >
+            <Menu className="w-4 h-4" />
+            <span className="text-[10px]">Menu</span>
+          </button>
+        </nav>
       </div>
     </div>
   );

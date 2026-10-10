@@ -73,27 +73,27 @@ export default function ProductDetailsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
       <div
-        className="bg-[#12141c] border border-zinc-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-[#12141c] border border-zinc-800 rounded-2xl w-full max-w-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-zinc-800/80 flex items-center justify-between bg-[#151722]/60">
+        <div className="px-4 py-3.5 sm:px-6 sm:py-4 border-b border-zinc-800/80 flex items-center justify-between bg-[#151722]/60">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-center text-zinc-300">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-800/80 border border-zinc-700/60 flex items-center justify-center text-zinc-300 shrink-0">
               <Package className="w-4 h-4 text-[#e5a93b]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-semibold text-white">
+                <h2 className="text-sm sm:text-base font-semibold text-white">
                   Product Details
                 </h2>
-                <span className="text-[11px] font-medium text-zinc-400 px-2 py-0.5 rounded-md bg-zinc-800 border border-zinc-700/60">
+                <span className="text-[10px] sm:text-[11px] font-medium text-zinc-400 px-2 py-0.5 rounded-md bg-zinc-800 border border-zinc-700/60">
                   ID: #{product.product_id}
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">
                 Complete overview of inventory item specifications
               </p>
             </div>
@@ -102,7 +102,7 @@ export default function ProductDetailsModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 sm:p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -110,7 +110,7 @@ export default function ProductDetailsModal({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-6 overflow-y-auto flex-1">
+        <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 overflow-y-auto flex-1">
           {/* Top Overview: Image + Main Meta */}
           <div className="flex flex-col sm:flex-row gap-5 items-start">
             {/* Image Preview */}
@@ -305,12 +305,12 @@ export default function ProductDetailsModal({
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="px-6 py-4 border-t border-zinc-800/80 bg-[#151722]/60 flex flex-wrap items-center justify-between gap-3">
+        <div className="px-4 py-3.5 sm:px-6 sm:py-4 border-t border-zinc-800/80 bg-[#151722]/60 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
           {/* Deactivate / Reactivate button */}
           <button
             type="button"
             onClick={() => onToggleActive(product)}
-            className={`px-4 py-2.5 rounded-xl text-xs font-medium transition-colors flex items-center gap-2 cursor-pointer ${
+            className={`w-full sm:w-auto justify-center px-4 py-2.5 rounded-xl text-xs font-medium transition-colors flex items-center gap-2 cursor-pointer ${
               product.isActive === 1
                 ? "bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20"
                 : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
@@ -320,21 +320,21 @@ export default function ProductDetailsModal({
             <span>{product.isActive === 1 ? "Deactivate Product" : "Reactivate Product"}</span>
           </button>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors text-xs font-medium cursor-pointer"
+              className="flex-1 sm:flex-none justify-center px-4 py-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors text-xs font-medium cursor-pointer text-center"
             >
               Close
             </button>
 
             <Link
               to={`/admin/edit-product/${product.product_id}`}
-              className="px-4 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="flex-1 sm:flex-none justify-center px-4 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer text-center"
             >
               <Edit2 className="w-3.5 h-3.5" />
-              <span>Edit Full Product</span>
+              <span>Edit Product</span>
             </Link>
           </div>
         </div>

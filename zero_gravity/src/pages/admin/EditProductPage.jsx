@@ -216,10 +216,10 @@ export default function EditProductPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <Link
             to="/admin"
-            className="px-4 py-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors text-xs font-semibold"
+            className="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition-colors text-xs font-semibold"
           >
             Cancel
           </Link>
@@ -227,12 +227,12 @@ export default function EditProductPage() {
             type="button"
             onClick={handleSubmit}
             disabled={saving}
-            className="px-5 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="flex-1 sm:flex-none justify-center px-5 py-2.5 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Saving Changes...
+                Saving...
               </>
             ) : (
               <>
@@ -675,36 +675,36 @@ export default function EditProductPage() {
         </div>
 
         {/* Bottom Action Buttons */}
-        <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
+        <div className="pt-4 border-t border-zinc-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <Link
             to="/admin"
-            className="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-white transition-colors"
+            className="inline-flex items-center justify-center sm:justify-start gap-2 text-xs text-zinc-400 hover:text-white transition-colors py-2"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Inventory</span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/admin"
-              className="px-5 py-3 rounded-xl border border-zinc-800 text-zinc-300 hover:bg-zinc-800/60 transition-colors text-xs font-semibold"
+              className="flex-1 sm:flex-none text-center px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl border border-zinc-800 text-zinc-300 hover:bg-zinc-800/60 transition-colors text-xs font-semibold"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-3 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="flex-1 sm:flex-none justify-center px-5 sm:px-6 py-2.5 sm:py-3 bg-[#e5a93b] hover:bg-[#d4972e] text-zinc-950 font-medium rounded-xl text-xs transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {saving ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Saving Changes...
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4" />
-                  Save Changes
+                  <span>Save Changes</span>
                 </>
               )}
             </button>
