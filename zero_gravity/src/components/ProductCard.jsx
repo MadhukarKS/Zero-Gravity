@@ -120,7 +120,7 @@ export default function ProductCard({ product }) {
           )}
 
           {/* Product Name */}
-          <h3 className="font-semibold text-base text-white leading-snug line-clamp-1">
+          <h3 className="font-semibold text-base text-white leading-snug line-clamp-2">
             {product.product_name || product.name}
           </h3>
 
