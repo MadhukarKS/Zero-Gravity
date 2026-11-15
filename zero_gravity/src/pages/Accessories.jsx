@@ -5,7 +5,9 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { fetchPublicProducts, fetchCategories, fetchBrands } from "@/lib/supabase";
 import { useSEO } from "@/lib/useSEO";
-import { Search, ChevronDown, Check, PackageOpen, RotateCcw, MessageCircle, Wrench, AlertCircle, Layers, Tag } from "lucide-react";
+import { Search, ChevronDown, Check, PackageOpen, RotateCcw, MessageCircle, Wrench, AlertCircle, Layers, Tag, Loader2 } from "lucide-react";
+
+const PAGE_SIZE = 12;
 
 function CustomDropdown({ value, onChange, options, placeholder = "Select...", icon: Icon }) {
   const [open, setOpen] = useState(false);
@@ -95,6 +97,12 @@ export default function Accessories() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Lazy-load pagination state
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef(null);
+  // Ref to track latest counts inside observer without stale closures
+  const paginationRef = useRef({ visibleCount: PAGE_SIZE, totalCount: 0 });
+
   const loadData = async () => {
     setLoading(true);
     setError(null);
@@ -149,6 +157,11 @@ export default function Accessories() {
     loadData();
   }, []);
 
+  // Reset visible count whenever filters/search change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [selectedCategory, selectedBrand, q]);
+
   const categoryOptions = useMemo(() => [
     { value: "all", label: "All Categories" },
     ...categories.map((c) => ({ value: c.category_name, label: c.category_name }))
@@ -192,6 +205,37 @@ export default function Accessories() {
     });
   }, [products, selectedCategory, selectedBrand, q]);
 
+  // Keep ref in sync on every render so the observer callback reads fresh values
+  // (no dep array = runs after every render, cheaply)
+  useEffect(() => {
+    paginationRef.current = { visibleCount, totalCount: items.length };
+  });
+
+  // Persistent IntersectionObserver — mounts once after initial load completes.
+  // Reads latest counts via paginationRef to avoid stale closures.
+  // Disconnects itself when all items are already visible.
+  useEffect(() => {
+    if (loading) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        if (!entries[0].isIntersecting) return;
+        const { visibleCount: current, totalCount } = paginationRef.current;
+        if (current >= totalCount) {
+          obs.disconnect();
+          return;
+        }
+        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, totalCount));
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loading]);
+
   const hasActiveFilters = selectedCategory !== "all" || selectedBrand !== "all" || q.trim() !== "";
 
   const clearAllFilters = () => {
@@ -199,6 +243,10 @@ export default function Accessories() {
     setSelectedBrand("all");
     setQ("");
   };
+
+  // Paginated slice shown on screen
+  const visibleItems = useMemo(() => items.slice(0, visibleCount), [items, visibleCount]);
+  const hasMore = visibleCount < items.length;
 
   return (
     <div className="relative bg-background text-foreground min-h-screen flex flex-col">
@@ -317,7 +365,9 @@ export default function Accessories() {
           {/* Header count info */}
           <div className="flex items-center justify-between mb-6 sm:mb-8 pb-3 sm:pb-4 border-b border-zinc-800">
             <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
-              {loading ? "Loading products…" : `${items.length} ${items.length === 1 ? "Product" : "Products"} Found`}
+              {loading
+                ? "Loading products…"
+                : `${visibleItems.length} of ${items.length} ${items.length === 1 ? "Product" : "Products"}`}
             </span>
             <Link
               to="/cart"
@@ -420,11 +470,27 @@ export default function Accessories() {
 
           {/* Active Products Grid */}
           {!loading && !error && items.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-              {items.map((prod) => (
-                <ProductCard key={prod.product_id || prod.id} product={prod} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                {visibleItems.map((prod) => (
+                  <ProductCard key={prod.product_id || prod.id} product={prod} />
+                ))}
+              </div>
+
+              {/* Sentinel + load-more indicator */}
+              <div ref={sentinelRef} className="mt-8 flex items-center justify-center">
+                {hasMore ? (
+                  <div className="flex items-center gap-2 text-zinc-500 text-xs py-4">
+                    <Loader2 className="w-4 h-4 animate-spin text-[#e5a93b]" />
+                    <span>Loading more products…</span>
+                  </div>
+                ) : (
+                  <p className="text-zinc-600 text-xs py-4 tracking-wide">
+                    — All {items.length} products loaded —
+                  </p>
+                )}
+              </div>
+            </>
           )}
         </div>
       </section>
