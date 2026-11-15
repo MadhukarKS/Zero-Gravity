@@ -344,7 +344,7 @@ export default function AdminDashboard({ user, onLogout }) {
                 options={[
                   { value: "all", label: "All Categories" },
                   ...categories.map((c) => ({
-                    value: c.category_id,
+                    value: String(c.category_id),
                     label: c.category_name,
                   })),
                 ]}
@@ -361,7 +361,7 @@ export default function AdminDashboard({ user, onLogout }) {
                 options={[
                   { value: "all", label: "All Brands" },
                   ...brands.map((b) => ({
-                    value: b.brand_id,
+                    value: String(b.brand_id),
                     label: b.brand_name,
                   })),
                 ]}
