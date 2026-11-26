@@ -4,9 +4,13 @@ import CustomSelect from "@/components/ui/CustomSelect";
 
 const ATTRIBUTE_OPTIONS = [
   { value: "Size", label: "Size" },
+  { value: "Capacity", label: "Capacity" },
   { value: "Color", label: "Color" },
-  { value: "Weight", label: "Weight" },
   { value: "Material", label: "Material" },
+  { value: "Style", label: "Style" },
+  { value: "Type", label: "Type" },
+  { value: "Position", label: "Position" },
+  { value: "Weight", label: "Weight" },
 ];
 
 const QUICK_PRESETS = {
