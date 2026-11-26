@@ -58,13 +58,19 @@ export function useCart() {
 }
 
 export function buildWhatsAppOrderUrl(items, note) {
-  const lines = items.map((i) => `• ${i.name} (${i.cat}) × ${i.qty} — ${i.price}`).join("\n");
+  const lines = items
+    .map((i) => {
+      const varPart = i.variation ? ` [${i.variation}]` : "";
+      return `• ${i.name}${varPart} (${i.cat}) × ${i.qty} — ${i.price}`;
+    })
+    .join("\n");
   const fullText = `Hi ZERO GRAVITY, I'd like to order the following accessories:\n\n${lines}${note ? `\n\nNote: ${note}` : ""}`;
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(fullText)}`;
 }
 
 export function buildWhatsAppSingleUrl(item) {
-  const text = `Hi ZERO GRAVITY, I'd like to order: ${item.name} (${item.cat}) — ${item.price}. Please share the details.`;
+  const varPart = item.variation ? ` [${item.variation}]` : "";
+  const text = `Hi ZERO GRAVITY, I'd like to order: ${item.name}${varPart} (${item.cat}) — ${item.price}. Please share the details.`;
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 }
 

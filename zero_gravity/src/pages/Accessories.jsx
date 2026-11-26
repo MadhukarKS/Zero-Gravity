@@ -199,7 +199,10 @@ export default function Accessories() {
         pName.toLowerCase().includes(query) ||
         pBrandName.toLowerCase().includes(query) ||
         pCatName.toLowerCase().includes(query) ||
-        pDesc.toLowerCase().includes(query);
+        pDesc.toLowerCase().includes(query) ||
+        (p.product_variations || []).some((v) =>
+          (v.variation_name || "").toLowerCase().includes(query)
+        );
 
       return matchesCat && matchesBrand && matchesSearch;
     });

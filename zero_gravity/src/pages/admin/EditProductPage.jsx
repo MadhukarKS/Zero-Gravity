@@ -22,7 +22,9 @@ import {
   fetchBrands,
   uploadProductImage,
   updateProduct,
+  summarizeVariations,
 } from "@/lib/supabase";
+import ProductVariationsEditor from "@/components/admin/ProductVariationsEditor";
 
 export default function EditProductPage() {
   const { id } = useParams();
@@ -35,6 +37,11 @@ export default function EditProductPage() {
 
   // Form fields
   const [productName, setProductName] = useState("");
+  const [productType, setProductType] = useState("simple");
+  const [variationAttribute, setVariationAttribute] = useState("Size");
+  const [variations, setVariations] = useState([
+    { variation_name: "", stock: "1", price: "", sale_price: "" },
+  ]);
   const [categoryId, setCategoryId] = useState("");
   const [brandId, setBrandId] = useState("");
   const [price, setPrice] = useState("");
@@ -73,6 +80,25 @@ export default function EditProductPage() {
 
         const p = prodRes.data;
         setProductName(p.product_name || "");
+        const existingVars = Array.isArray(p.product_variations) ? p.product_variations : [];
+        const inferredType = p.product_type === "variable" || existingVars.length > 0 ? "variable" : "simple";
+        setProductType(inferredType);
+        setVariationAttribute(
+          p.variation_attribute || existingVars[0]?.attribute_name || "Size"
+        );
+        if (existingVars.length > 0) {
+          setVariations(
+            existingVars.map((v) => ({
+              variation_name: v.variation_name || "",
+              stock: String(v.stock ?? 0),
+              price: String(v.price ?? ""),
+              sale_price:
+                v.sale_price !== null && v.sale_price !== undefined
+                  ? String(v.sale_price)
+                  : "",
+            }))
+          );
+        }
         setCategoryId(String(p.category_id || ""));
         setBrandId(p.product_brand ? String(p.product_brand) : "");
         setPrice(String(p.product_price || ""));
@@ -128,7 +154,20 @@ export default function EditProductPage() {
       setErrorMsg("Please select a category.");
       return;
     }
-    if (!price || Number(price) <= 0) {
+
+    const isVariable = productType === "variable";
+    if (isVariable) {
+      const filled = variations.filter((v) => v.variation_name.trim() !== "");
+      if (filled.length === 0) {
+        setErrorMsg("Please add at least one variation (e.g. M, L, XL).");
+        return;
+      }
+      const hasInvalidPrice = filled.some((v) => !v.price || Number(v.price) <= 0);
+      if (hasInvalidPrice) {
+        setErrorMsg("Each variation must have a valid regular price greater than 0.");
+        return;
+      }
+    } else if (!price || Number(price) <= 0) {
       setErrorMsg("Please enter a valid price greater than 0.");
       return;
     }
@@ -156,10 +195,13 @@ export default function EditProductPage() {
 
       const updatePayload = {
         product_name: productName.trim(),
+        product_type: productType,
+        variation_attribute: isVariable ? variationAttribute : null,
+        variations: isVariable ? variations : [],
         category_id: categoryId,
         product_brand: brandId || null,
-        product_price: parseFloat(price),
-        product_qty: parseInt(qty, 10) || 0,
+        product_price: isVariable ? 0 : parseFloat(price),
+        product_qty: isVariable ? 0 : parseInt(qty, 10) || 0,
         product_description: description.trim(),
         product_image: finalImageUrl || null,
         isAvailable,
@@ -273,19 +315,34 @@ export default function EditProductPage() {
                 <span className="text-[11px] text-zinc-500 font-medium">* Required fields</span>
               </div>
 
-              {/* Product Name */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
-                  Product Name <span className="text-[#e5a93b]">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  placeholder="e.g. Apex Carbon Pro Helmet"
-                  required
-                  className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm"
-                />
+              {/* Product Name & Type */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                <div className="sm:col-span-8">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                    Product Name <span className="text-[#e5a93b]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                    placeholder="e.g. Scala Blaze Riding Jacket – Grey Black"
+                    required
+                    className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm"
+                  />
+                </div>
+                <div className="sm:col-span-4">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                    Product Type <span className="text-[#e5a93b]">*</span>
+                  </label>
+                  <CustomSelect
+                    value={productType}
+                    onChange={(val) => setProductType(val)}
+                    options={[
+                      { value: "simple", label: "Simple Product" },
+                      { value: "variable", label: "Variable Product" },
+                    ]}
+                  />
+                </div>
               </div>
 
               {/* Category & Brand Dropdowns */}
@@ -324,44 +381,46 @@ export default function EditProductPage() {
                 </div>
               </div>
 
-              {/* Price & Quantity */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
-                    Price (₹) <span className="text-[#e5a93b]">*</span>
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">
-                      ₹
-                    </span>
+              {/* Price & Quantity (Only for Simple Product) */}
+              {productType === "simple" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                      Price (₹) <span className="text-[#e5a93b]">*</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">
+                        ₹
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        placeholder="0.00"
+                        required
+                        className="w-full pl-9 pr-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
+                      Stock Quantity <span className="text-[#e5a93b]">*</span>
+                    </label>
                     <input
                       type="number"
                       min="0"
-                      step="0.01"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      placeholder="0.00"
+                      value={qty}
+                      onChange={(e) => setQty(e.target.value)}
+                      placeholder="0"
                       required
-                      className="w-full pl-9 pr-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm font-semibold"
+                      className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm"
                     />
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-2">
-                    Stock Quantity <span className="text-[#e5a93b]">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={qty}
-                    onChange={(e) => setQty(e.target.value)}
-                    placeholder="0"
-                    required
-                    className="w-full px-4 py-3 bg-[#0a0b10] border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e5a93b] focus:ring-1 focus:ring-[#e5a93b] transition-all text-sm"
-                  />
-                </div>
-              </div>
+              )}
 
               {/* Description */}
               <div>
@@ -377,6 +436,16 @@ export default function EditProductPage() {
                 />
               </div>
             </div>
+
+            {/* Product Variations Card (Variable Product) */}
+            {productType === "variable" && (
+              <ProductVariationsEditor
+                attributeName={variationAttribute}
+                onAttributeChange={setVariationAttribute}
+                variations={variations}
+                onChange={setVariations}
+              />
+            )}
 
             {/* Status & Visibility Flags Card */}
             <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-6 space-y-4">
@@ -654,19 +723,45 @@ export default function EditProductPage() {
                   <div className="text-[11px] font-semibold text-[#e5a93b] tracking-wider uppercase">
                     {selectedBrandName}
                   </div>
-                  <h3 className="font-bold text-white text-sm truncate font-display">
+                  <h3 className="font-bold text-white text-sm line-clamp-2 font-display">
                     {productName.trim() || "Product Title"}
                   </h3>
                   <p className="text-zinc-400 text-xs line-clamp-2">
                     {description.trim() || "Product description will appear here in the store..."}
                   </p>
+                  {productType === "variable" && (() => {
+                    const { valid } = summarizeVariations(variations);
+                    if (valid.length === 0) return null;
+                    return (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {valid.map((v, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-900 border border-zinc-700 text-zinc-200"
+                          >
+                            {v.variation_name}
+                          </span>
+                        ))}
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center justify-between pt-2 border-t border-zinc-800/80 mt-2">
-                    <span className="text-base font-extrabold text-white font-display">
-                      ₹{price ? Number(price).toLocaleString("en-IN") : "0"}
-                    </span>
-                    <span className="text-[11px] text-zinc-500 font-medium">
-                      {qty} in stock
-                    </span>
+                    {(() => {
+                      const isVar = productType === "variable";
+                      const { totalStock, minPrice } = summarizeVariations(variations);
+                      const previewPrice = isVar ? minPrice : Number(price || 0);
+                      const previewQty = isVar ? totalStock : Number(qty || 0);
+                      return (
+                        <>
+                          <span className="text-base font-extrabold text-white font-display">
+                            ₹{previewPrice ? previewPrice.toLocaleString("en-IN") : "0"}
+                          </span>
+                          <span className="text-[11px] text-zinc-500 font-medium">
+                            {previewQty} in stock
+                          </span>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

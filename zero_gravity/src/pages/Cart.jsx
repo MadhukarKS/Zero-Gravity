@@ -68,6 +68,11 @@ export default function Cart() {
                       <div className="flex-1 min-w-0 sm:hidden">
                         <div className="text-[10px] tracking-wider uppercase text-yellow/80 font-semibold">{i.cat}</div>
                         <h3 className="font-display font-bold text-sm text-white truncate">{i.name}</h3>
+                        {i.variation && (
+                          <span className="inline-block mt-0.5 px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-semibold text-zinc-300">
+                            {i.variation}
+                          </span>
+                        )}
                         <p className="text-yellow text-sm mt-0.5 font-bold">{i.price}</p>
                       </div>
                     </div>
@@ -76,6 +81,11 @@ export default function Cart() {
                     <div className="hidden sm:block flex-1 min-w-0">
                       <div className="text-[10px] tracking-wider uppercase text-yellow/80 font-semibold">{i.cat}</div>
                       <h3 className="font-display font-bold text-base text-white truncate">{i.name}</h3>
+                      {i.variation && (
+                        <span className="inline-block mt-1 px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-[11px] font-semibold text-zinc-300">
+                          {i.variation}
+                        </span>
+                      )}
                       <p className="text-yellow text-sm mt-1 font-bold">{i.price}</p>
                     </div>
 

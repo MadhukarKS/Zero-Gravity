@@ -515,10 +515,15 @@ export default function AdminDashboard({ user, onLogout }) {
                       >
                         {p.product_name}
                       </button>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 border border-zinc-700/50">
                           {categoryName}
                         </span>
+                        {p.product_variations?.length > 0 && (
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-[#e5a93b]/15 text-[#e5a93b] border border-[#e5a93b]/30 font-medium">
+                            {p.product_variations.length} {p.variation_attribute || "Variants"}
+                          </span>
+                        )}
                         <span className="text-[10px] text-zinc-500">ID: #{p.product_id}</span>
                       </div>
                     </div>
@@ -628,9 +633,16 @@ export default function AdminDashboard({ user, onLogout }) {
                             >
                               {p.product_name}
                             </button>
-                            <span className="text-[11px] text-zinc-500 font-normal">
-                              ID: #{p.product_id}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] text-zinc-500 font-normal">
+                                ID: #{p.product_id}
+                              </span>
+                              {p.product_variations?.length > 0 && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#e5a93b]/15 text-[#e5a93b] border border-[#e5a93b]/30 font-medium">
+                                  {p.product_variations.length} {p.variation_attribute || "Variants"}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>

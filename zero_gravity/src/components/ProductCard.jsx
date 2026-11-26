@@ -1,13 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ShoppingBag, Check, MessageCircle, Shield, PackageX } from "lucide-react";
 import { useCart, buildWhatsAppSingleUrl } from "@/lib/cart";
+import { getEffectiveVariationPrice } from "@/lib/supabase";
 
 export default function ProductCard({ product }) {
   const { add } = useCart();
   const [imgError, setImgError] = useState(false);
   const [added, setAdded] = useState(false);
 
+  const variations = Array.isArray(product?.product_variations)
+    ? product.product_variations
+    : [];
+  const isVariable = variations.length > 0;
+
+  const getInitialVariationId = () => {
+    if (!isVariable) return null;
+    const firstInStock = variations.find((v) => Number(v.stock) > 0);
+    return (firstInStock || variations[0])?.variation_id ?? null;
+  };
+
+  const [selectedVarId, setSelectedVarId] = useState(getInitialVariationId);
+
+  useEffect(() => {
+    setSelectedVarId(getInitialVariationId());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.product_id, variations.length]);
+
   if (!product) return null;
+
+  const selectedVariation = isVariable
+    ? variations.find((v) => v.variation_id === selectedVarId) || variations[0]
+    : null;
+
+  const attributeName =
+    product.variation_attribute ||
+    selectedVariation?.attribute_name ||
+    "Size";
 
   const categoryName =
     product.category_master?.category_name ||
@@ -21,28 +49,55 @@ export default function ProductCard({ product }) {
     product.brand ||
     null;
 
-  const numericPrice = Number(product.product_price ?? product.price ?? 0);
+  const regPrice = selectedVariation
+    ? Number(selectedVariation.price ?? 0)
+    : Number(product.product_price ?? product.price ?? 0);
+  const effectivePrice = selectedVariation
+    ? getEffectiveVariationPrice(selectedVariation)
+    : regPrice;
+  const hasSale = selectedVariation && effectivePrice < regPrice;
+
   const formattedPrice =
-    typeof product.price === "string" && product.price.startsWith("₹")
+    !selectedVariation &&
+    typeof product.price === "string" &&
+    product.price.startsWith("₹")
       ? product.price
-      : `₹${numericPrice.toLocaleString("en-IN")}`;
+      : `₹${effectivePrice.toLocaleString("en-IN")}`;
 
   const isAvailable =
     product.isAvailable !== undefined
       ? Boolean(product.isAvailable)
       : true;
-  const inStock = isAvailable && (product.product_qty === undefined || product.product_qty > 0);
-  const isLowStock = inStock && product.product_qty !== undefined && product.product_qty > 0 && product.product_qty <= 3;
+
+  const activeQty = selectedVariation
+    ? Number(selectedVariation.stock ?? 0)
+    : product.product_qty;
+
+  const inStock =
+    isAvailable &&
+    (activeQty === undefined || Number(activeQty) > 0);
+  const isLowStock =
+    inStock &&
+    activeQty !== undefined &&
+    Number(activeQty) > 0 &&
+    Number(activeQty) <= 3;
 
   const isNew = Boolean(product.isNew);
   const isFeatured = Boolean(product.isFeatured);
 
+  const productName = product.product_name || product.name;
+  const variationLabel = selectedVariation
+    ? `${attributeName}: ${selectedVariation.variation_name}`
+    : null;
+
   const handleAddToCart = () => {
     if (!inStock) return;
 
+    const baseId = product.product_id || product.id;
     add({
-      id: product.product_id || product.id,
-      name: product.product_name || product.name,
+      id: selectedVariation ? `${baseId}::${selectedVariation.variation_id}` : baseId,
+      name: productName,
+      variation: variationLabel,
       cat: categoryName,
       price: formattedPrice,
       img: product.product_image || product.img,
@@ -53,7 +108,8 @@ export default function ProductCard({ product }) {
   };
 
   const whatsappUrl = buildWhatsAppSingleUrl({
-    name: product.product_name || product.name,
+    name: productName,
+    variation: variationLabel,
     cat: categoryName,
     price: formattedPrice,
   });
@@ -130,15 +186,59 @@ export default function ProductCard({ product }) {
               {product.product_description}
             </p>
           )}
+
+          {/* Variation Selector Pills */}
+          {isVariable && (
+            <div className="mt-2.5">
+              <div className="text-[10px] uppercase tracking-wider text-zinc-400 font-semibold mb-1.5">
+                {attributeName}:{" "}
+                <span className="text-zinc-200">{selectedVariation?.variation_name}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {variations.map((v) => {
+                  const isSelected = v.variation_id === selectedVariation?.variation_id;
+                  const outOfStock = Number(v.stock ?? 0) <= 0;
+                  return (
+                    <button
+                      key={v.variation_id}
+                      type="button"
+                      onClick={() => setSelectedVarId(v.variation_id)}
+                      className={`px-2 py-1 rounded-md text-[11px] font-semibold border transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-[#e5a93b] text-black border-[#e5a93b] shadow-sm"
+                          : outOfStock
+                          ? "bg-zinc-900/50 text-zinc-600 border-zinc-800/80 line-through hover:border-zinc-700"
+                          : "bg-zinc-900 text-zinc-300 border-zinc-700/80 hover:border-[#e5a93b]/60 hover:text-white"
+                      }`}
+                      title={
+                        outOfStock
+                          ? `${v.variation_name} — Out of stock`
+                          : `${v.variation_name} (${v.stock} in stock)`
+                      }
+                    >
+                      {v.variation_name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Price & Stock Indicator Row */}
         <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-medium block">Price</span>
-            <span className="text-lg font-bold text-white">
-              {formattedPrice}
-            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg font-bold text-white">
+                {formattedPrice}
+              </span>
+              {hasSale && (
+                <span className="text-xs text-zinc-500 line-through">
+                  ₹{regPrice.toLocaleString("en-IN")}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="text-right">
@@ -150,7 +250,7 @@ export default function ProductCard({ product }) {
                   }`}
                 />
                 <span className={isLowStock ? "text-amber-400 text-[11px]" : "text-emerald-400 text-[11px]"}>
-                  {isLowStock ? `Only ${product.product_qty} left` : "In Stock"}
+                  {isLowStock ? `Only ${activeQty} left` : "In Stock"}
                 </span>
               </div>
             ) : (
@@ -192,7 +292,15 @@ export default function ProductCard({ product }) {
 
           {/* WhatsApp Direct Order Button */}
           <a
-            href={inStock ? whatsappUrl : `https://wa.me/917892318639?text=${encodeURIComponent(`Hi Zero Gravity, I want to inquire about availability for: ${product.product_name || product.name}`)}`}
+            href={
+              inStock
+                ? whatsappUrl
+                : `https://wa.me/917892318639?text=${encodeURIComponent(
+                    `Hi Zero Gravity, I want to inquire about availability for: ${productName}${
+                      variationLabel ? ` (${variationLabel})` : ""
+                    }`
+                  )}`
+            }
             target="_blank"
             rel="noreferrer"
             className="py-2.5 px-3 rounded-lg text-xs font-semibold tracking-wider uppercase bg-[#e5a93b] hover:bg-[#f5af3f] text-black flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center"

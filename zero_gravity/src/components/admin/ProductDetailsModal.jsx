@@ -273,20 +273,32 @@ export default function ProductDetailsModal({
           {product.product_variations && product.product_variations.length > 0 && (
             <div className="space-y-2">
               <span className="text-xs font-medium text-zinc-400 block uppercase tracking-wider">
-                Product Variations ({product.product_variations.length})
+                Product Variations — {product.variation_attribute || product.product_variations[0]?.attribute_name || "Option"} ({product.product_variations.length})
               </span>
               <div className="rounded-xl border border-zinc-800 overflow-hidden divide-y divide-zinc-800">
-                {product.product_variations.map((v, idx) => (
-                  <div key={idx} className="p-3 bg-zinc-900/40 flex items-center justify-between text-xs">
-                    <span className="font-medium text-white">{v.variation_name}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-zinc-300 font-semibold">
-                        ₹{Number(v.price).toLocaleString("en-IN")}
-                      </span>
-                      <span className="text-zinc-400">{v.stock} in stock</span>
+                {product.product_variations.map((v, idx) => {
+                  const hasSale = v.sale_price !== null && v.sale_price !== undefined && Number(v.sale_price) > 0 && Number(v.sale_price) < Number(v.price);
+                  return (
+                    <div key={v.variation_id || idx} className="p-3 bg-zinc-900/40 flex items-center justify-between text-xs">
+                      <span className="font-medium text-white">{v.variation_name}</span>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-zinc-200 font-semibold">
+                            ₹{Number(hasSale ? v.sale_price : v.price).toLocaleString("en-IN")}
+                          </span>
+                          {hasSale && (
+                            <span className="text-zinc-500 line-through text-[11px]">
+                              ₹{Number(v.price).toLocaleString("en-IN")}
+                            </span>
+                          )}
+                        </div>
+                        <span className={Number(v.stock) <= 0 ? "text-rose-400" : "text-zinc-400"}>
+                          {v.stock} in stock
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
